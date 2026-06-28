@@ -1,15 +1,17 @@
 #!/bin/sh
 #
-#ver20250926
+#ver20260619
 #BOXABALAR
-clear;
+[ -t 1 ] && clear;  # Solo limpia la pantalla si la salida es una terminal interactiva
 echo "";
-fabricante=`sudo dmidecode -s system-manufacturer`;
-modelo=`sudo dmidecode -s system-product-name`;
-equipo=`cat /etc/hostname`;
-microprocesador=`sudo dmidecode -s processor-version | sed 's/(R)//g' | sed 's/(TM)//g' | sed 's/CPU//g' | sed 's/  */ /g' | sed 's/^ //g' | sed 's/ $//g'`;
-ip=`hostname -I`;
-TAB_OFFSET="    ";
+
+fabricante=$(sudo dmidecode -s system-manufacturer)
+modelo=$(sudo dmidecode -s system-product-name)
+equipo=$(cat /etc/hostname)
+microprocesador=$(sudo dmidecode -s processor-version | sed 's/(R)//g' | sed 's/(TM)//g' | sed 's/CPU//g' | sed 's/  */ /g' | sed 's/^ //g' | sed 's/ $//g')
+ip=$(hostname -I)
+TAB_OFFSET="    "
+
 echo "EQUIPO:"
 echo "$TAB_OFFSET$equipo"
 echo ""
@@ -29,11 +31,11 @@ echo "RAM: "
 
 printf "${TAB_OFFSET}%-15s %-15s %-25s %-20s\n" "Ranura #" "Tipo Ranura" "Cantidad (MB)" "Velocidad (MT/s)"
 printf "${TAB_OFFSET}%-15s %-15s %-25s %-20s\n" "---------------" "---------------" "-------------------------" "------------------"
+
 sudo dmidecode -t memory | awk -v offset="$TAB_OFFSET" '
 /Memory Device$/ {
-    # Reiniciar variables para cada nuevo dispositivo de memoria
     locator = "N/A"
-    type_designator = "N/A" # Para capturar el tipo de ranura (DIMM, etc.)
+    type_designator = "N/A"
     size = "Vacía"
     speed = "N/A"
     is_occupied = 0
@@ -42,11 +44,6 @@ sudo dmidecode -t memory | awk -v offset="$TAB_OFFSET" '
     locator = $2
 }
 /Type:/ {
-    # Capturar el tipo de ranura (e.g., DDR4, DDR3)
-    # También se puede usar para el tipo de dispositivo físico si está disponible en la misma sección.
-    # dmidecode -t 17 muestra "Type: DDR4", pero el "Tipo Ranura" podría ser más bien "Form Factor" o "Type" del slot en sí.
-    # Para el "tipo de ranura" físico como DIMM, usaremos el Form Factor.
-    # No obstante, "Type" aquí se refiere al tipo de tecnología de la RAM.
     type_ram = $2
 }
 /Form Factor:/ {
@@ -68,72 +65,85 @@ sudo dmidecode -t memory | awk -v offset="$TAB_OFFSET" '
     }
 }
 /Speed:/ {
-    # Preferimos la velocidad configurada si existe, si no, la nominal
     speed_val = $2
-    if (speed_val ~ /^[0-9]+$/) { # Asegurarse de que sea un número
+    if (speed_val ~ /^[0-9]+$/) {
         speed = speed_val
     }
 }
 /Configured Memory Speed:/ {
-    # Si esta línea aparece, sobrescribimos la velocidad con la configurada
     speed_val = $4
-    if (speed_val ~ /^[0-9]+$/) { # Asegurarse de que sea un número
+    if (speed_val ~ /^[0-9]+$/) {
         speed = speed_val
     }
 }
-# Imprimir la información cuando se detecta el inicio de un nuevo "Memory Device"
-# o al final del archivo (END). Asegurarse de que no sea el primer "Memory Device" vacío al inicio
 /^Memory Device/ && NR > 1 {
-    # Imprimir la información del dispositivo anterior antes de procesar el nuevo
-    # Solo imprimir si la ranura estaba ocupada o si queremos mostrar ranuras vacías
     if (prev_is_occupied == 1) {
         printf "%s%-15s %-15s %-25s %-20s\n", offset, prev_locator, prev_type_designator, prev_size_mb " MB (" prev_type_ram ")", prev_speed " MT/s"
     }
 }
 {
-    # Almacenar los valores actuales para la próxima iteración (o para el END)
     prev_locator = locator
     prev_type_designator = type_designator
     prev_size_mb = size_mb
-    prev_type_ram = type_ram # Guardar el tipo de RAM (DDR3, DDR4)
+    prev_type_ram = type_ram
     prev_speed = speed
     prev_is_occupied = is_occupied
 }
 END {
-    # Imprimir la información del último dispositivo
     if (prev_is_occupied == 1) {
         printf "%s%-15s %-15s %-25s %-20s\n", offset, prev_locator, prev_type_designator, prev_size_mb " MB (" prev_type_ram ")", prev_speed " MT/s"
     } 
 }
 '
 echo ""
+
 echo "DISCO DURO: "
-printf "${TAB_OFFSET}%-15s %-10s %-20s %-15s\n" "Dispositivo" "Tamaño" "Tipo (HDD/SSD)"
-printf "${TAB_OFFSET}%-15s %-10s %-20s %-15s\n" "-----------" "------" "--------------"
+
+# Determinar el modo de arranque (UEFI o Legacy)
+if [ -d /sys/firmware/efi ]; then
+    BOOT_MODE="UEFI"
+else
+    BOOT_MODE="Legacy"
+fi
+
+printf "${TAB_OFFSET}%-15s %-10s %-20s %-15s %-15s\n" "Dispositivo" "Tamaño" "Tipo (HDD/SSD)" "Partición" "Arranque"
+printf "${TAB_OFFSET}%-15s %-10s %-20s %-15s %-15s\n" "-----------" "------" "--------------" "---------" "--------"
+
 DEVICES=$(lsblk -nd -o NAME,TYPE,SIZE,ROTA | grep -E "disk")
+
 echo "$DEVICES" | while read -r line; do
     DEVICE_NAME=$(echo "$line" | awk '{print $1}')
     DEVICE_TYPE=$(echo "$line" | awk '{print $2}')
     DEVICE_SIZE=$(echo "$line" | awk '{print $3}')
-    ROTA_FLAG=$(echo "$line" | awk '{print $4}') # 1 para rotacional (HDD), 0 para no rotacional (SSD)
+    ROTA_FLAG=$(echo "$line" | awk '{print $4}')
 
-    # Determinar si es HDD o SSD usando la bandera ROTA
     if [ "$ROTA_FLAG" -eq 0 ]; then
         HDD_SSD_STATUS="SSD"
     elif [ "$ROTA_FLAG" -eq 1 ]; then
         HDD_SSD_STATUS="HDD"
     else
-        # Fallback si ROTA no es claro o no está disponible
         HDD_SSD_STATUS="Desconocido"
-        # Intentar una comprobación adicional para dispositivos NVMe o MMC que suelen ser SSD
-        if [[ "$DEVICE_NAME" == nvme* || "$DEVICE_NAME" == mmcblk* ]]; then
-            HDD_SSD_STATUS="SSD (detectado por nombre)"
-        fi
+        case "$DEVICE_NAME" in
+            nvme*|mmcblk*)
+                HDD_SSD_STATUS="SSD (detectado por nombre)"
+                ;;
+        esac
     fi
 
-    printf "${TAB_OFFSET}%-15s %-10s %-20s %-15s\n" "/dev/$DEVICE_NAME" "$DEVICE_SIZE" "$HDD_SSD_STATUS"
+    # Determinar el tipo de partición (GPT o MBR)
+    PART_TYPE=$(lsblk -ndo PTTYPE "/dev/$DEVICE_NAME")
+    if [ -z "$PART_TYPE" ]; then
+        PART_TYPE="N/A"
+    elif [ "$PART_TYPE" = "dos" ]; then
+        PART_TYPE="MBR"
+    else
+        PART_TYPE=$(echo "$PART_TYPE" | tr '[:lower:]' '[:upper:]')
+    fi
+
+    printf "${TAB_OFFSET}%-15s %-10s %-20s %-15s %-15s\n" "/dev/$DEVICE_NAME" "$DEVICE_SIZE" "$HDD_SSD_STATUS" "$PART_TYPE" "$BOOT_MODE"
 done
 echo ""
+
 echo "TARXETA DE REDE: "
 INTERFACES=$(ip -o link show | awk -F': ' '{print $2}' | grep -v 'lo')
 if [ -z "$INTERFACES" ]; then
@@ -141,31 +151,29 @@ if [ -z "$INTERFACES" ]; then
     echo "${TAB_OFFSET}Asegúrate de que tus interfaces Ethernet estén conectadas y activas."
     exit 0
 fi
+
 printf "${TAB_OFFSET}%-20s %-15s %-15s %-20s\n" "Interfaz" "Velocidad" "Dúplex" " MAC Address"
 printf "${TAB_OFFSET}%-20s %-15s %-15s %-20s\n" "--------------------" "---------------" "--------------" "-------------------"
+
 for IFACE in $INTERFACES; do
     SPEED="N/A"
     DUPLEX="N/A"
-    MAC_ADDRESS="N/A" # Inicializar a N/A
+    MAC_ADDRESS="N/A"
 
     ETHTOOL_OUTPUT=$(ethtool "$IFACE" 2>/dev/null)
 
     if [ -n "$ETHTOOL_OUTPUT" ] && echo "$ETHTOOL_OUTPUT" | grep -q "Speed:"; then
-        # Extraer velocidad
         SPEED_LINE=$(echo "$ETHTOOL_OUTPUT" | grep "Speed:")
         if [ -n "$SPEED_LINE" ]; then
             SPEED=$(echo "$SPEED_LINE" | awk '{print $2}')
         fi
 
-        # Extraer dúplex
         DUPLEX_LINE=$(echo "$ETHTOOL_OUTPUT" | grep "Duplex:")
         if [ -n "$DUPLEX_LINE" ]; then
             DUPLEX=$(echo "$DUPLEX_LINE" | awk '{print $2}')
         fi
     fi
 
-    # Obtener la dirección MAC usando awk
-    # Buscamos la línea que contiene "link/ether" y tomamos el segundo campo
     MAC_LINE=$(ip link show "$IFACE" | awk '/link\/ether/ {print $2}')
     if [ -n "$MAC_LINE" ]; then
         MAC_ADDRESS="$MAC_LINE"
@@ -174,4 +182,3 @@ for IFACE in $INTERFACES; do
     printf "${TAB_OFFSET}%-20s %-15s %-15s %-20s\n" "$IFACE" "$SPEED" "$DUPLEX" "$MAC_ADDRESS"
 done
 echo ""
-
