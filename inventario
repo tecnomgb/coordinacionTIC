@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#ver20260619
+#ver20260620
 #BOXABALAR
 [ -t 1 ] && clear;  # Solo limpia la pantalla si la salida es una terminal interactiva
 echo "";
