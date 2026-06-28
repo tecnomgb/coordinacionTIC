@@ -1,0 +1,45 @@
+#!/bin/sh
+clear
+
+# Función para validar o formato IPv4
+validar_ip() {
+    local ip=$1
+    # Expresión regular para o formato x.x.x.x (0-255 en cada bloque)
+    if echo "$ip" | grep -Eq '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$'; then
+        return 0 # IP válida
+    else
+        return 1 # IP non válida
+    fi
+}
+
+echo "Introduce a IP do equipo de profesor:"
+read ipequipoprofe
+
+# 1. Comprobamos se está baleiro
+if [ -z "$ipequipoprofe" ]; then
+    echo "Erro: O campo non pode estar baleiro."
+    exit 1
+fi
+
+# 2. Comprobamos o formato técnico da IP
+if validar_ip "$ipequipoprofe"; then
+    # 3. Antes de engadir, comprobamos se "server" xa existe para non duplicalo
+    if grep -q "server" /etc/hosts; then
+        echo "Aviso: Xa existe unha entrada para 'server' en /etc/hosts."
+        echo "Queres substituíla? (s/n)"
+        read resposta
+        if [ "$resposta" = "s" ]; then
+            sudo sed -i "/server/d" /etc/hosts # Borra a liña vella
+        else
+            echo "Operación cancelada."
+            exit 0
+        fi
+    fi
+
+    # Engadimos a nova IP
+    echo "$ipequipoprofe    server" | sudo tee -a /etc/hosts > /dev/null
+    echo "Configuración gardada con éxito: $ipequipoprofe -> server"
+else
+    echo "Erro: '$ipequipoprofe' non é un formato de IP válido (ex: 192.168.1.10)."
+    exit 1
+fi

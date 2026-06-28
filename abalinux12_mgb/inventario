@@ -1,0 +1,184 @@
+#!/bin/sh
+#
+#ver20260619
+#BOXABALAR
+[ -t 1 ] && clear;  # Solo limpia la pantalla si la salida es una terminal interactiva
+echo "";
+
+fabricante=$(sudo dmidecode -s system-manufacturer)
+modelo=$(sudo dmidecode -s system-product-name)
+equipo=$(cat /etc/hostname)
+microprocesador=$(sudo dmidecode -s processor-version | sed 's/(R)//g' | sed 's/(TM)//g' | sed 's/CPU//g' | sed 's/  */ /g' | sed 's/^ //g' | sed 's/ $//g')
+ip=$(hostname -I)
+TAB_OFFSET="    "
+
+echo "EQUIPO:"
+echo "$TAB_OFFSET$equipo"
+echo ""
+echo "IP:"
+echo "$TAB_OFFSET$ip"
+echo ""
+echo "MARCA:"
+echo "$TAB_OFFSET$fabricante"
+echo ""
+echo "MODELO:"
+echo "$TAB_OFFSET$modelo"
+echo ""
+echo "MICROPROCESADOR:"
+echo "$TAB_OFFSET$microprocesador"
+echo ""
+echo "RAM: "
+
+printf "${TAB_OFFSET}%-15s %-15s %-25s %-20s\n" "Ranura #" "Tipo Ranura" "Cantidad (MB)" "Velocidad (MT/s)"
+printf "${TAB_OFFSET}%-15s %-15s %-25s %-20s\n" "---------------" "---------------" "-------------------------" "------------------"
+
+sudo dmidecode -t memory | awk -v offset="$TAB_OFFSET" '
+/Memory Device$/ {
+    locator = "N/A"
+    type_designator = "N/A"
+    size = "Vacía"
+    speed = "N/A"
+    is_occupied = 0
+}
+/Locator:/ {
+    locator = $2
+}
+/Type:/ {
+    type_ram = $2
+}
+/Form Factor:/ {
+    type_designator = $3
+}
+/Size:/ {
+    if ($3 == "No" && $4 == "Module" && $5 == "Installed") {
+        is_occupied = 0
+        size_mb = 0
+    } else {
+        is_occupied = 1
+        size_raw = $2
+        unit = $3
+        if (unit == "MB") {
+            size_mb = size_raw
+        } else if (unit == "GB") {
+            size_mb = size_raw * 1024
+        }
+    }
+}
+/Speed:/ {
+    speed_val = $2
+    if (speed_val ~ /^[0-9]+$/) {
+        speed = speed_val
+    }
+}
+/Configured Memory Speed:/ {
+    speed_val = $4
+    if (speed_val ~ /^[0-9]+$/) {
+        speed = speed_val
+    }
+}
+/^Memory Device/ && NR > 1 {
+    if (prev_is_occupied == 1) {
+        printf "%s%-15s %-15s %-25s %-20s\n", offset, prev_locator, prev_type_designator, prev_size_mb " MB (" prev_type_ram ")", prev_speed " MT/s"
+    }
+}
+{
+    prev_locator = locator
+    prev_type_designator = type_designator
+    prev_size_mb = size_mb
+    prev_type_ram = type_ram
+    prev_speed = speed
+    prev_is_occupied = is_occupied
+}
+END {
+    if (prev_is_occupied == 1) {
+        printf "%s%-15s %-15s %-25s %-20s\n", offset, prev_locator, prev_type_designator, prev_size_mb " MB (" prev_type_ram ")", prev_speed " MT/s"
+    } 
+}
+'
+echo ""
+
+echo "DISCO DURO: "
+
+# Determinar el modo de arranque (UEFI o Legacy)
+if [ -d /sys/firmware/efi ]; then
+    BOOT_MODE="UEFI"
+else
+    BOOT_MODE="Legacy"
+fi
+
+printf "${TAB_OFFSET}%-15s %-10s %-20s %-15s %-15s\n" "Dispositivo" "Tamaño" "Tipo (HDD/SSD)" "Partición" "Arranque"
+printf "${TAB_OFFSET}%-15s %-10s %-20s %-15s %-15s\n" "-----------" "------" "--------------" "---------" "--------"
+
+DEVICES=$(lsblk -nd -o NAME,TYPE,SIZE,ROTA | grep -E "disk")
+
+echo "$DEVICES" | while read -r line; do
+    DEVICE_NAME=$(echo "$line" | awk '{print $1}')
+    DEVICE_TYPE=$(echo "$line" | awk '{print $2}')
+    DEVICE_SIZE=$(echo "$line" | awk '{print $3}')
+    ROTA_FLAG=$(echo "$line" | awk '{print $4}')
+
+    if [ "$ROTA_FLAG" -eq 0 ]; then
+        HDD_SSD_STATUS="SSD"
+    elif [ "$ROTA_FLAG" -eq 1 ]; then
+        HDD_SSD_STATUS="HDD"
+    else
+        HDD_SSD_STATUS="Desconocido"
+        case "$DEVICE_NAME" in
+            nvme*|mmcblk*)
+                HDD_SSD_STATUS="SSD (detectado por nombre)"
+                ;;
+        esac
+    fi
+
+    # Determinar el tipo de partición (GPT o MBR)
+    PART_TYPE=$(lsblk -ndo PTTYPE "/dev/$DEVICE_NAME")
+    if [ -z "$PART_TYPE" ]; then
+        PART_TYPE="N/A"
+    elif [ "$PART_TYPE" = "dos" ]; then
+        PART_TYPE="MBR"
+    else
+        PART_TYPE=$(echo "$PART_TYPE" | tr '[:lower:]' '[:upper:]')
+    fi
+
+    printf "${TAB_OFFSET}%-15s %-10s %-20s %-15s %-15s\n" "/dev/$DEVICE_NAME" "$DEVICE_SIZE" "$HDD_SSD_STATUS" "$PART_TYPE" "$BOOT_MODE"
+done
+echo ""
+
+echo "TARXETA DE REDE: "
+INTERFACES=$(ip -o link show | awk -F': ' '{print $2}' | grep -v 'lo')
+if [ -z "$INTERFACES" ]; then
+    echo "${TAB_OFFSET}No se encontraron interfaces de red activas (excluyendo loopback)."
+    echo "${TAB_OFFSET}Asegúrate de que tus interfaces Ethernet estén conectadas y activas."
+    exit 0
+fi
+
+printf "${TAB_OFFSET}%-20s %-15s %-15s %-20s\n" "Interfaz" "Velocidad" "Dúplex" " MAC Address"
+printf "${TAB_OFFSET}%-20s %-15s %-15s %-20s\n" "--------------------" "---------------" "--------------" "-------------------"
+
+for IFACE in $INTERFACES; do
+    SPEED="N/A"
+    DUPLEX="N/A"
+    MAC_ADDRESS="N/A"
+
+    ETHTOOL_OUTPUT=$(ethtool "$IFACE" 2>/dev/null)
+
+    if [ -n "$ETHTOOL_OUTPUT" ] && echo "$ETHTOOL_OUTPUT" | grep -q "Speed:"; then
+        SPEED_LINE=$(echo "$ETHTOOL_OUTPUT" | grep "Speed:")
+        if [ -n "$SPEED_LINE" ]; then
+            SPEED=$(echo "$SPEED_LINE" | awk '{print $2}')
+        fi
+
+        DUPLEX_LINE=$(echo "$ETHTOOL_OUTPUT" | grep "Duplex:")
+        if [ -n "$DUPLEX_LINE" ]; then
+            DUPLEX=$(echo "$DUPLEX_LINE" | awk '{print $2}')
+        fi
+    fi
+
+    MAC_LINE=$(ip link show "$IFACE" | awk '/link\/ether/ {print $2}')
+    if [ -n "$MAC_LINE" ]; then
+        MAC_ADDRESS="$MAC_LINE"
+    fi
+
+    printf "${TAB_OFFSET}%-20s %-15s %-15s %-20s\n" "$IFACE" "$SPEED" "$DUPLEX" "$MAC_ADDRESS"
+done
+echo ""
