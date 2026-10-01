@@ -2,4 +2,5 @@
 #
 #ver20261001
 
-echo "toor" | su - root -c "exit" &>/dev/null && echo "Contrasinal por defecto sen cambiar" && sudo touch /home/usuario/Escritorio/CAMBIAR_CONTRASINAL_ROOT && exit;
+echo "toor" | su - root -c "exit" &>/dev/null && echo "o contrasinal é toor"|| echo "o contrasinal non é toor"
+echo "2o22.Maraca" | su - root -c "exit" &>/dev/null && echo "o contrasinal é 2o22.Maraca"|| echo "o contrasinal non é 2o22.Maraca"
