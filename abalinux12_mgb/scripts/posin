@@ -2,15 +2,22 @@
 #
 #ver20261001
 
-echo "toor" | su - root -c "exit" &>/dev/null && echo "Contrasinal por defecto sen cambiar" && sudo touch /home/usuario/Escritorio/CAMBIAR_CONTRASINAL_ROOT && exit;
+#CLONAR CARTAFOL DE GITHUB
+if [ ! -d /opt/github ];
+    then
+	    sudo sudo git clone https://github.com/tecnomgb/coordinacionTIC.git /opt/github;
+fi
+
+#ACTUALIZAR O CONTIDO DO CARTAFOL DE GITHUB CLONADO
+sudo git -C /opt/github pull;
+
+#UBICAR O ACTUALIZADOR
 
 #INSTALADOR DO SERVIZO DE ACTUALIZACIÓNS AUTOMÁTICAS DIARIAS
 if [ ! -f /etc/systemd/system/actualizar.service ] || [ ! -f /etc/systemd/system/actualizar.timer ] || [ `egrep -c 'network-online' /etc/systemd/system/actualizar.service` = '0' ];
     then
-        sudo rm -f /var/tmp/*.service;
-        sudo rm -f /var/tmp/*.timer;
         sudo systemctl stop actualizar.service;
-        sudo /usr/bin/wget -O /var/tmp/actualizar.service https://boxabalar.edu.xunta.gal/index.php/s/joJW9Jq3P89N9GH/download/actualizar.service;
+        sudo cp -f /usr/bin/wget -O /var/tmp/actualizar.service https://boxabalar.edu.xunta.gal/index.php/s/joJW9Jq3P89N9GH/download/actualizar.service;
         sudo /usr/bin/wget -O /var/tmp/actualizar.timer https://boxabalar.edu.xunta.gal/index.php/s/TeGgL5X5xmES79A/download/actualizar.timer;
         sudo mv -f /var/tmp/actualizar.service /etc/systemd/system/actualizar.service;
         sudo mv -f /var/tmp/actualizar.timer /etc/systemd/system/actualizar.timer;

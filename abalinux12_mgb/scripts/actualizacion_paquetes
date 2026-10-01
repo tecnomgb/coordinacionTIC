@@ -1,0 +1,30 @@
+#!/bin/bash   
+#
+#ver20261001
+#ACTUALIZACIÓN E LIMPEZA DE PAQUETES .DEB
+    sudo apt upgrade -f -y --allow-unauthenticated;
+    sudo apt dist-upgrade -f -y --allow-unauthenticated;
+    sudo apt -f install;
+    sudo dpkg --configure -a --force-confdef;
+    sudo apt update;
+    sudo apt upgrade -f -y --allow-unauthenticated;
+    sudo apt autoremove -y;
+    sudo apt -f install;
+    sudo dpkg --configure -a --force-confdef;
+    sudo apt dist-upgrade -f -y --allow-unauthenticated;
+    sudo apt -f install;
+    sudo dpkg --configure -a --force-confdef;
+    sudo apt autoremove -y;
+    sudo apt clean -y;
+    sudo apt autoclean -y;
+#ACTUALIZACIÓN E LIMPEZA DE PAQUETES FLATPAK
+    sudo flatpak update -y;
+    sudo flatpak uninstall -y --unused;
+#ACTUALIZACIÓN E LIMPEZA DE PAQUETES SNAP
+    num_snap=`sudo snap get system refresh.retain`;
+    if [ "$num_snap" != "2" ];
+        then
+            sudo snap set system refresh.retain=2;
+    fi
+    sudo snap refresh;
+    

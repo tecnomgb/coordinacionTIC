@@ -1,0 +1,48 @@
+#!/bin/bash
+#ver20261001
+
+clear;
+echo "Que acción queres realizar?";
+echo "";
+echo "1) Renomear o equipo / Cambiar a IP";
+echo "2) Arranxar a swap";
+echo "3) Actualizar paquetes do sistema";
+echo "4) Conxelación/desconxelacion do usuario";
+echo "5) Limpeza do usuario";
+echo "6) Habilitar/Deshabilitar inicio automático de usuario";
+echo "7) Bloqueo/Desbloqueo dos navegadores web";
+echo "8) Forzar a clonación pantalla_ordenador/panel_dixital nas aulas";
+echo "9) Instalación de epoptes nunha aula de informática";
+echo "10) Rematar e pechar o terminal";
+echo "11) Apagar o equipo";
+echo "";
+
+read final;
+case $final in
+    1) sudo renomear;;
+    2) sudo arranxoswap;;
+    3) sudo actualizacion_paquetes;;
+    4) sudo conxelar;;
+    5) sudo limpezausuario;;
+    6) sudo setautologin;;
+    7) sudo bloqueoweb;;
+    8) sudo setdisplaysclone;;
+    9) sudo setupepoptes;;
+    10) sudo rm -f /var/tmp/posin; sudo pkill -9 bash;;
+    11) sudo rm -f /var/tmp/posin; sudo poweroff;;
+    *) sudo rm -f /var/tmp/posin; sudo pkill -9 bash;; 
+esac
+clear;
+echo "Queres realizar algunha outra acción ou rematar e saír?";
+echo "";
+echo "1) Volver realizar outra acción";
+echo "2) Rematar e pechar o terminal";
+echo "3) Apagar o equipo";
+echo "";
+read pregunta;
+case $pregunta in
+    1) sudo todo;;
+    2) sudo rm -f /var/tmp/posin; sudo pkill -9 bash;;
+    3) sudo rm -f /var/tmp/posin; sudo poweroff;;
+    *) sudo rm -f /var/tmp/posin; sudo pkill -9 bash;;
+esac

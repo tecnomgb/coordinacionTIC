@@ -1,8 +1,16 @@
 #CAMBIO CONTRASINAL ROOT
-
+su
+sudo passwd root
 
 #INSTALAR ACCESO SSH
 sudo apt install -y ssh
 
+#CLONAR CARTAFOL DE GITHUB
+if [ ! -d /opt/github ];
+    then
+	    sudo sudo git clone https://github.com/tecnomgb/coordinacionTIC.git /opt/github;
+fi
 
+#ACTUALIZAR O CONTIDO DO CARTAFOL DE GITHUB CLONADO
+sudo git -C /opt/github pull;
 
