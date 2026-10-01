@@ -1,0 +1,17 @@
+#!/bin/sh   
+#
+#ver20261001
+
+data_longa=$(date +%a_%d_%m_%Y__%H:%M);
+equipo=`cat /etc/hostname`;
+
+#ACTUALIZAR O CONTIDO DO REPOSITORIO DE SCRIPTS
+sudo git -C /opt/github pull;
+sudo chmod 755 -R /opt/github/abalinux12_mgb/scripts;
+sudo rm -f /opt/actualizacion_*.txt;
+sudo rm -f /opt/actualizacion_*.err;
+sudo rm -f /var/tmp/actualizacion_*.txt;
+sudo rm -f /var/tmp/actualizacion_*.err;
+sudo sh /opt/github/abalinux12_mgb/scripts/posin > /var/tmp/actualizacion_"$equipo"_$data_longa.txt 2> /var/tmp/actualizacion_"$equipo"_$data_longa.err;
+exit
+

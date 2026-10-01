@@ -1,0 +1,8 @@
+#CAMBIO CONTRASINAL ROOT
+
+
+#INSTALAR ACCESO SSH
+sudo apt install -y ssh
+
+
+

@@ -1,0 +1,5 @@
+#!/bin/sh   
+#
+#ver20261001
+
+echo "toor" | su - root -c "exit" &>/dev/null && echo "Contrasinal por defecto sen cambiar" && sudo touch /home/usuario/Escritorio/CAMBIAR_CONTRASINAL_ROOT && exit;

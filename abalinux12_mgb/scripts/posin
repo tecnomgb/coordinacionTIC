@@ -1,0 +1,23 @@
+#!/bin/sh   
+#
+#ver20261001
+
+echo "toor" | su - root -c "exit" &>/dev/null && echo "Contrasinal por defecto sen cambiar" && sudo touch /home/usuario/Escritorio/CAMBIAR_CONTRASINAL_ROOT && exit;
+
+#INSTALADOR DO SERVIZO DE ACTUALIZACIÓNS AUTOMÁTICAS DIARIAS
+if [ ! -f /etc/systemd/system/actualizar.service ] || [ ! -f /etc/systemd/system/actualizar.timer ] || [ `egrep -c 'network-online' /etc/systemd/system/actualizar.service` = '0' ];
+    then
+        sudo rm -f /var/tmp/*.service;
+        sudo rm -f /var/tmp/*.timer;
+        sudo systemctl stop actualizar.service;
+        sudo /usr/bin/wget -O /var/tmp/actualizar.service https://boxabalar.edu.xunta.gal/index.php/s/joJW9Jq3P89N9GH/download/actualizar.service;
+        sudo /usr/bin/wget -O /var/tmp/actualizar.timer https://boxabalar.edu.xunta.gal/index.php/s/TeGgL5X5xmES79A/download/actualizar.timer;
+        sudo mv -f /var/tmp/actualizar.service /etc/systemd/system/actualizar.service;
+        sudo mv -f /var/tmp/actualizar.timer /etc/systemd/system/actualizar.timer;
+		sudo chmod 755 /etc/systemd/system/actualiza*;
+        sudo systemctl daemon-reload;
+        sudo systemctl enable actualizar.timer;
+        sudo systemctl start actualizar.timer;
+        sudo systemctl start actualizar.service;
+fi
+
