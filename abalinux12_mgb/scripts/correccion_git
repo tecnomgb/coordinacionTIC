@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if ! sudo git -C /opt/github pull;
+    then
+        echo "ejecutando a rama do if de non éxito no git pull";
+        CURRENT_BRANCH=$(sudo git -C /opt/github rev-parse --abbrev-ref HEAD);
+        sudo git -C /opt/github reset --hard "origin/$CURRENT_BRANCH";
+        sudo git -C /opt/github pull;
+fi
+
