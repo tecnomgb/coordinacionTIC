@@ -1,87 +1,522 @@
+```bash
 #!/bin/bash
 
-# Verificar que se ejecuta como root (necesario para cambiar red y hostname)
-if [ "$EUID" -ne 0 ]; then
-  echo "[-] Este script debe ejecutarse con sudo o como root."
-  exit 1
-fi
+# ============================================================
+# CONFIGURACIÓN AUTOMÁTICA DE EQUIPOS - Debian 12 / KDE
+#
+# Busca la MAC del equipo en:
+#
+# /opt/github/abalinux12_mgb/ficheiros/inventario_equipos.csv
+#
+# Cuando encuentra la MAC:
+#   EQUIPO  -> hostname
+#   IP      -> dirección IP
+#
+# Red:
+#   Máscara : /24 (255.255.255.0)
+#   Gateway : 10.55.96.1
+#
+# Requiere:
+#   Debian 12
+#   NetworkManager
+#   nmcli
+# ============================================================
 
-# Ruta del archivo CSV
-CSV_FILE="/opt/github/abalinux12_mgb/ficheiros/inventario_equipos.csv"
+set -e
 
-# Obtener la interfaz activa y su MAC
-INTERFAZ=$(ip route get 8.8.8.8 | awk '{print $5; exit}')
-if [ -z "$INTERFAZ" ]; then
-    echo "[-] No se pudo detectar una interfaz de red activa."
+# ============================================================
+# CONFIGURACIÓN
+# ============================================================
+
+CSV="/opt/github/abalinux12_mgb/ficheiros/inventario_equipos.csv"
+
+GATEWAY="10.55.96.1"
+PREFIX="24"
+
+LOG="/var/log/configurar_equipo.log"
+
+# ============================================================
+# FUNCIONES
+# ============================================================
+
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" | tee -a "$LOG"
+}
+
+error() {
+    echo
+    echo "============================================================"
+    echo "ERROR"
+    echo "============================================================"
+    echo "$*"
+    echo "============================================================"
+    echo
     exit 1
-fi
+}
 
-MAC_ACTUAL=$(cat /sys/class/net/$INTERFAZ/address)
+# ------------------------------------------------------------
+# Limpia un campo CSV
+# ------------------------------------------------------------
 
-IP_ENCONTRADA=""
-EQUIPO_ENCONTRADO=""
+limpiar_campo() {
 
-# Leer el archivo CSV para buscar la MAC
-while IFS=',' read -r aula equipo ip_csv marca modelo micro ranuras ram_cant ram_vel disco_dev disco_tam disco_tipo disco_part disco_arr red_int red_vel red_dup mac_csv || [ -n "$mac_csv" ]; do
-    
-    # Limpiar espacios, comillas y retornos de carro
-    mac_csv=$(echo "$mac_csv" | tr -d '\r"' | xargs)
-    ip_csv=$(echo "$ip_csv" | tr -d '\r"' | xargs)
-    equipo=$(echo "$equipo" | tr -d '\r"' | xargs)
-    
-    # Saltar la cabecera
-    [[ "$mac_csv" == "RED MAC" ]] && continue
-    
-    if [[ "${MAC_ACTUAL,,}" == "${mac_csv,,}" ]]; then
-        IP_ENCONTRADA="$ip_csv"
-        EQUIPO_ENCONTRADO="$equipo"
-        break
-    fi
-done < <(tail -n +2 "$CSV_FILE")
+    local CAMPO="$1"
 
-if [[ -z "$IP_ENCONTRADA" ]]; then
-    echo "[-] MAC ($MAC_ACTUAL) no encontrada en el inventario."
-    exit 0
-else
-    echo "[+] MAC encontrada. Asignando equipo: $EQUIPO_ENCONTRADO con IP: $IP_ENCONTRADA"
-    
-    # 1. Asignar el nombre de equipo al sistema (Hostname)
-    hostnamectl set-hostname "$EQUIPO_ENCONTRADO"
-    
-    # 2. Actualizar /etc/hosts
-    if grep -q "127.0.1.1" /etc/hosts; then
-        sed -i "s/127.0.1.1.*/127.0.1.1\t$EQUIPO_ENCONTRADO/" /etc/hosts
-    else
-        echo -e "127.0.1.1\t$EQUIPO_ENCONTRADO" >> /etc/hosts
+    # Eliminar CR de Windows
+    CAMPO="${CAMPO//$'\r'/}"
+
+    # Eliminar espacios al principio y al final
+    CAMPO="$(echo "$CAMPO" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+
+    # Eliminar comillas exteriores
+    if [[ "$CAMPO" == \"*\" ]]; then
+        CAMPO="${CAMPO#\"}"
+        CAMPO="${CAMPO%\"}"
     fi
 
-    # 3. Gestionar la conexión de red evitando bloqueos
-    NOMBRE_CONEXION="Conexion-Inventario-$INTERFAZ"
-    
-    echo "[+] Limpiando conexiones anteriores en la interfaz $INTERFAZ..."
-    # Desactivar y borrar perfiles previos asociados a esta interfaz de forma silenciosa
-    nmcli device disconnect "$INTERFAZ" 2>/dev/null
-    nmcli -t -f NAME,DEVICE connection show | grep ":$INTERFAZ$" | cut -d: -f1 | while read -r c; do
-        nmcli connection delete "$c" 2>/dev/null
+    echo "$CAMPO"
+}
+
+# ------------------------------------------------------------
+# Normaliza una MAC
+# ------------------------------------------------------------
+
+normalizar_mac() {
+
+    local MAC="$1"
+
+    MAC="$(limpiar_campo "$MAC")"
+
+    MAC="${MAC,,}"
+
+    # Permitir MAC con guiones
+    MAC="${MAC//-/:}"
+
+    echo "$MAC"
+}
+
+# ------------------------------------------------------------
+# Valida una MAC
+# ------------------------------------------------------------
+
+mac_valida() {
+
+    local MAC="$1"
+
+    [[ "$MAC" =~ ^([0-9a-f]{2}:){5}[0-9a-f]{2}$ ]]
+}
+
+# ------------------------------------------------------------
+# Valida una dirección IPv4
+# ------------------------------------------------------------
+
+ip_valida() {
+
+    local IP="$1"
+
+    if ! [[ "$IP" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]]; then
+        return 1
+    fi
+
+    IFS='.' read -r O1 O2 O3 O4 <<< "$IP"
+
+    for OCTETO in "$O1" "$O2" "$O3" "$O4"; do
+
+        if (( OCTETO < 0 || OCTETO > 255 )); then
+            return 1
+        fi
+
     done
 
-    echo "[+] Creando perfil de red gestionado para la interfaz $INTERFAZ..."
-    # Crear la conexión y configurar IP, gateway y DNS en un solo comando para evitar múltiples bloqueos
-    nmcli connection add type ethernet ifname "$INTERFAZ" con-name "$NOMBRE_CONEXION" \
-        ipv4.addresses "$IP_ENCONTRADA/24" \
-        ipv4.gateway "10.55.96.1" \
-        ipv4.dns "8.8.8.8,1.1.1.1" \
-        ipv4.method manual \
-        autoconnect yes >/dev/null
-        
-    echo "[+] Aplicando la conexión sin bloqueo..."
-    # Activar la conexión de manera asíncrona/forzada para que no se cuelgue la consola
-    nmcli connection up "$NOMBRE_CONEXION" ifname "$INTERFAZ" >/dev/null 2>&1 &
-    
-    # Dar un pequeño respiro para que NetworkManager aplique el cambio de IP
-    sleep 3
-    
-    echo "[✔] Configuración aplicada con éxito."
-    echo "    - Hostname: $(hostname)"
-    echo "    - IP asignada: $IP_ENCONTRADA en interfaz $INTERFAZ"
+    return 0
+}
+
+# ============================================================
+# INICIO
+# ============================================================
+
+clear
+
+echo
+echo "============================================================"
+echo " CONFIGURACIÓN AUTOMÁTICA DEL EQUIPO"
+echo " Debian 12 / KDE / NetworkManager"
+echo "============================================================"
+echo
+
+# ============================================================
+# COMPROBAR ROOT
+# ============================================================
+
+if [ "$EUID" -ne 0 ]; then
+
+    echo "ERROR: Este script debe ejecutarse como root."
+    echo
+    echo "Ejemplo:"
+    echo
+    echo "    sudo $0"
+    echo
+
+    exit 1
+
 fi
+
+# ============================================================
+# PREPARAR LOG
+# ============================================================
+
+touch "$LOG" 2>/dev/null || true
+
+log "============================================================"
+log "Inicio de configuración"
+log "============================================================"
+
+# ============================================================
+# COMPROBAR NETWORKMANAGER
+# ============================================================
+
+if ! command -v nmcli >/dev/null 2>&1; then
+
+    error "No se encuentra nmcli.
+
+NetworkManager no parece estar instalado.
+
+Comprueba con:
+
+    systemctl status NetworkManager"
+
+fi
+
+# ============================================================
+# COMPROBAR QUE NETWORKMANAGER ESTÁ ACTIVO
+# ============================================================
+
+if ! systemctl is-active --quiet NetworkManager; then
+
+    error "NetworkManager no está activo.
+
+Comprueba con:
+
+    systemctl status NetworkManager"
+
+fi
+
+# ============================================================
+# COMPROBAR CSV
+# ============================================================
+
+if [ ! -f "$CSV" ]; then
+
+    error "No se encuentra el archivo:
+
+$CSV"
+
+fi
+
+if [ ! -r "$CSV" ]; then
+
+    error "No se puede leer el archivo:
+
+$CSV"
+
+fi
+
+log "Archivo CSV: $CSV"
+
+# ============================================================
+# COMPROBAR QUE EL CSV NO ESTÉ VACÍO
+# ============================================================
+
+if [ ! -s "$CSV" ]; then
+
+    error "El archivo CSV está vacío:
+
+$CSV"
+
+fi
+
+# ============================================================
+# LEER CABECERA
+# ============================================================
+
+CABECERA=$(head -n 1 "$CSV")
+
+if [ -z "$CABECERA" ]; then
+
+    error "No se encuentra la cabecera del CSV."
+
+fi
+
+IFS=',' read -ra COLUMNAS <<< "$CABECERA"
+
+COL_EQUIPO=-1
+COL_MAC=-1
+COL_IP=-1
+
+for i in "${!COLUMNAS[@]}"; do
+
+    CAMPO=$(limpiar_campo "${COLUMNAS[$i]}")
+
+    case "${CAMPO^^}" in
+
+        "EQUIPO")
+            COL_EQUIPO=$i
+            ;;
+
+        "RED MAC")
+            COL_MAC=$i
+            ;;
+
+        "IP")
+            COL_IP=$i
+            ;;
+
+    esac
+
+done
+
+# ============================================================
+# COMPROBAR COLUMNAS
+# ============================================================
+
+if [ "$COL_EQUIPO" -eq -1 ]; then
+    error "El CSV no contiene la columna EQUIPO."
+fi
+
+if [ "$COL_MAC" -eq -1 ]; then
+    error "El CSV no contiene la columna RED MAC."
+fi
+
+if [ "$COL_IP" -eq -1 ]; then
+    error "El CSV no contiene la columna IP."
+fi
+
+log "Columnas CSV detectadas correctamente."
+
+# ============================================================
+# OBTENER INTERFACES DE RED
+# ============================================================
+
+declare -A MAC_INTERFACES
+
+log "Buscando interfaces de red..."
+
+for RUTA_INTERFAZ in /sys/class/net/*; do
+
+    INTERFAZ=$(basename "$RUTA_INTERFAZ")
+
+    # Ignorar loopback
+    if [ "$INTERFAZ" = "lo" ]; then
+        continue
+    fi
+
+    if [ ! -f "$RUTA_INTERFAZ/address" ]; then
+        continue
+    fi
+
+    MAC=$(cat "$RUTA_INTERFAZ/address")
+
+    MAC=$(normalizar_mac "$MAC")
+
+    # Ignorar MAC vacía o cero
+    if [ -z "$MAC" ] ||
+       [ "$MAC" = "00:00:00:00:00:00" ]; then
+        continue
+    fi
+
+    if mac_valida "$MAC"; then
+
+        MAC_INTERFACES["$MAC"]="$INTERFAZ"
+
+        log "Interfaz detectada: $INTERFAZ -> $MAC"
+
+    fi
+
+done
+
+if [ "${#MAC_INTERFACES[@]}" -eq 0 ]; then
+
+    error "No se han encontrado interfaces de red con una MAC válida."
+
+fi
+
+# ============================================================
+# COMPROBAR MAC DUPLICADAS EN EL CSV
+# ============================================================
+
+declare -A MAC_CSV_VECES
+
+while IFS=',' read -ra CAMPOS; do
+
+    [ "${#CAMPOS[@]}" -eq 0 ] && continue
+
+    MAC_CSV="${CAMPOS[$COL_MAC]}"
+
+    MAC_CSV=$(normalizar_mac "$MAC_CSV")
+
+    [ -z "$MAC_CSV" ] && continue
+
+    MAC_CSV_VECES["$MAC_CSV"]=$(( ${MAC_CSV_VECES["$MAC_CSV"]:-0} + 1 ))
+
+done < <(tail -n +2 "$CSV")
+
+for MAC in "${!MAC_CSV_VECES[@]}"; do
+
+    if [ "${MAC_CSV_VECES[$MAC]}" -gt 1 ]; then
+
+        error "La MAC $MAC aparece más de una vez en el CSV.
+
+Corrige el inventario antes de continuar."
+
+    fi
+
+done
+
+# ============================================================
+# COMPROBAR IP DUPLICADAS EN EL CSV
+# ============================================================
+
+declare -A IP_VECES
+
+while IFS=',' read -ra CAMPOS; do
+
+    [ "${#CAMPOS[@]}" -eq 0 ] && continue
+
+    IP_CSV="${CAMPOS[$COL_IP]}"
+
+    IP_CSV=$(limpiar_campo "$IP_CSV")
+
+    [ -z "$IP_CSV" ] && continue
+
+    IP_VECES["$IP_CSV"]=$(( ${IP_VECES["$IP_CSV"]:-0} + 1 ))
+
+done < <(tail -n +2 "$CSV")
+
+for IP_CHECK in "${!IP_VECES[@]}"; do
+
+    if [ "${IP_VECES[$IP_CHECK]}" -gt 1 ]; then
+
+        error "La IP $IP_CHECK aparece más de una vez en el CSV.
+
+Corrige el inventario antes de continuar."
+
+    fi
+
+done
+
+# ============================================================
+# BUSCAR MAC DEL EQUIPO EN EL CSV
+# ============================================================
+
+EQUIPO=""
+IP=""
+INTERFAZ=""
+MAC_ENCONTRADA=""
+
+log "Buscando MAC del equipo en el inventario..."
+
+while IFS=',' read -ra CAMPOS; do
+
+    [ "${#CAMPOS[@]}" -eq 0 ] && continue
+
+    MAC_CSV="${CAMPOS[$COL_MAC]}"
+    EQUIPO_CSV="${CAMPOS[$COL_EQUIPO]}"
+    IP_CSV="${CAMPOS[$COL_IP]}"
+
+    MAC_CSV=$(normalizar_mac "$MAC_CSV")
+    EQUIPO_CSV=$(limpiar_campo "$EQUIPO_CSV")
+    IP_CSV=$(limpiar_campo "$IP_CSV")
+
+    # Comprobar si esta MAC existe en el equipo
+    if [ -n "${MAC_INTERFACES[$MAC_CSV]+x}" ]; then
+
+        INTERFAZ="${MAC_INTERFACES[$MAC_CSV]}"
+        MAC_ENCONTRADA="$MAC_CSV"
+        EQUIPO="$EQUIPO_CSV"
+        IP="$IP_CSV"
+
+        break
+
+    fi
+
+done < <(tail -n +2 "$CSV")
+
+# ============================================================
+# SI NO SE ENCUENTRA LA MAC
+# ============================================================
+
+if [ -z "$EQUIPO" ]; then
+
+    echo
+    echo "============================================================"
+    echo " EQUIPO NO ENCONTRADO EN EL INVENTARIO"
+    echo "============================================================"
+    echo
+    echo "MAC encontradas en este ordenador:"
+    echo
+
+    for MAC in "${!MAC_INTERFACES[@]}"; do
+
+        echo "    $MAC_INTERFACES[$MAC] -> $MAC"
+
+    done
+
+    echo
+    echo "El equipo NO ha sido modificado."
+    echo
+
+    log "No se encontró ninguna MAC del equipo en el CSV."
+
+    exit 1
+
+fi
+
+# ============================================================
+# VALIDAR NOMBRE DE EQUIPO
+# ============================================================
+
+if [ -z "$EQUIPO" ]; then
+
+    error "El campo EQUIPO está vacío para la MAC $MAC_ENCONTRADA."
+
+fi
+
+if [[ ! "$EQUIPO" =~ ^[a-zA-Z0-9][a-zA-Z0-9.-]*$ ]]; then
+
+    error "El nombre de equipo no es válido:
+
+$EQUIPO
+
+Utiliza únicamente letras, números, puntos y guiones."
+
+fi
+
+# ============================================================
+# VALIDAR IP
+# ============================================================
+
+if [ -z "$IP" ]; then
+
+    error "El campo IP está vacío para:
+
+MAC: $MAC_ENCONTRADA
+Equipo: $EQUIPO"
+
+fi
+
+if ! ip_valida "$IP"; then
+
+    error "La IP '$IP' no es una dirección IPv4 válida."
+
+fi
+
+# ============================================================
+# COMPROBAR QUE LA IP ESTÁ EN 10.55.96.0/24
+# ============================================================
+
+IFS='.' read -r IP1 IP2 IP3 IP4 <<< "$IP"
+
+if [ "$IP1" -ne 10 ] ||
+   [ "$IP2" -ne 55 ]
+```
+

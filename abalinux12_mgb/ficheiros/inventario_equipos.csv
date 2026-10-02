@@ -1,101 +1,101 @@
-AULA,EQUIPO,IP,MARCA,MODELO,MICROPROCESADOR,NÚMERO DE RANURAS,CANTIDAD DE RAM,VELOCIDAD RAM,DISCO DISPOSITIVO,DISCO TAMAÑO,DISCO TIPO,DISCO PARTICIÓN,DISCO ARRANQUE,RED INTERFAZ,RED VELOCIDAD,RED DÚPLEX,RED MAC
-info1,info1-09,10.55.96.109,LENOVO,10A8S1WE00,Intel Core i5-4570 @ 3.20GHz,4,8192 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,44:8a:5b:c7:bb:0c
-info1,info1-17,10.55.96.117,Hewlett-Packard,HP Compaq 6000 Pro SFF PC,Intel Core2 Duo E7500 @ 2.93GHz,5,16388 MB,1333 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,00:23:24:17:39:82
-info1,info1-24,10.55.96.124,Hewlett-Packard,HP 600B,Intel Pentium G2020T @ 2.50GHz,2,4096 MB,1333 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,100Mb/s,Full,7c:05:07:73:fc:08
-info1,info1-21,10.55.96.121,LENOVO,10A8S4EV00,Intel Core i5-4590 @ 3.30GHz,4,8192 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,4c:cc:6a:12:04:be
-info1,info1-02,10.55.96.102,LENOVO,THINKCENTRE M93P,Intel Core i5-4570 @ 3.20GHz,4,24576 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,44:8a:5b:c0:e0:c0
-info1,info1-14,10.55.96.114,LENOVO,10A8S1WE00,Intel Core i5-4570 @ 3.20GHz,4,24576 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,44:8a:5b:a8:b5:cd
-info1,info1-27,10.55.96.127,Hewlett-Packard,HP 600B,Intel Pentium G2020T @ 2.50GHz,2,4096 MB,1333 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,100Mb/s,Full,7c:05:07:73:f0:f7
-info1,info1-11,10.55.96.111,LENOVO,10A8S1WE00,Intel Core i5-4570 @ 3.20GHz,N/A,0 MB,N/A,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,44:39:c4:90:bd:91
-info1,info1-29,10.55.96.129,LENOVO,10A8S1WE00,Intel Core i5-4570 @ 3.20GHz,4,24576 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,44:39:c4:90:bf:50
-info1,info1-10,10.55.96.110,LENOVO,10A8S1WE00,Intel Core i5-4570 @ 3.20GHz,4,8192 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,44:8a:5b:c7:ba:bb
-info1,info1-16,10.55.96.116,Hewlett-Packard,HP Compaq 6000 Pro SFF PC,Intel Core2 Duo E7500 @ 2.93GHz,5,16388 MB,1333 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,00:23:24:07:28:59
-info1,info1-13,10.55.96.113,LENOVO,10A8S1WE00,Intel Core i5-4570 @ 3.20GHz,4,24576 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,44:39:c4:8d:6f:0e
-info1,info1-23,10.55.96.123,Hewlett-Packard,HP 600B,Intel Pentium G2020T @ 2.50GHz,2,4096 MB,1333 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,100Mb/s,Full,7c:05:07:73:e3:0f
-info1,info1-28,10.55.96.128,FUJITSU,ESPRIMO P400,Intel Pentium G640 @ 2.80GHz,2,4096 MB,1067 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,00:19:99:df:a2:7d
-info1,info1-15,10.55.96.115,Hewlett-Packard,HP Compaq 6000 Pro SFF PC,Intel Core2 Duo E7500 @ 2.93GHz,5,4100 MB,1333 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,00:23:24:17:36:fe
-info1,info1-04,10.55.96.104,LENOVO,10A8S1WE00,Intel Core i5-4570 @ 3.20GHz,4,24576 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,44:8a:5b:c7:ba:db
-info1,info1-01,10.55.96.101,LENOVO,10A8S1WE00,Intel Core i5-4570 @ 3.20GHz,4,8192 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,44:8a:5b:7f:9b:8b
-info1,info1-26,10.55.96.126,Hewlett-Packard,HP 600B,Intel Pentium G2020T @ 2.50GHz,2,4096 MB,1333 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,100Mb/s,Full,7c:05:07:73:e2:f1
-info1,info1-07,10.55.96.107,LENOVO,10A8S1WE00,Intel Core i5-4570 @ 3.20GHz,4,24576 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,44:8a:5b:c7:bf:a0
-info1,info1-25,10.55.96.125,Hewlett-Packard,HP 600B,Intel Pentium G2020T @ 2.50GHz,2,4096 MB,1333 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,100Mb/s,Full,7c:05:07:73:fc:14
-info1,info1-30,10.55.96.130,LENOVO,10A8S1WE00,Intel Core i5-4570 @ 3.20GHz,4,8192 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,44:39:c4:90:df:33
-info1,info1-12,10.55.96.112,LENOVO,10A8S0UW00,Intel Core i5-4570 @ 3.20GHz,4,24576 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,Unknown!,Unknown!,00:e0:4c:96:c5:47
-info1,info1-22,10.55.96.122,Hewlett-Packard,HP 600B,Intel Pentium G2020T @ 2.50GHz,2,4096 MB,1333 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,100Mb/s,Full,7c:05:07:73:f8:b4
-info1,info1-profe,10.55.96.100,ASUSTeK COMPUTER INC.,K5130,Intel Core i3-3240T @ 2.90GHz,2,8192 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,bc:ee:7b:db:3d:44
-info1,info1-18,10.55.96.118,LENOVO,10A8S1WE00,Intel Core i5-4570 @ 3.20GHz,4,8192 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,44:8a:5b:c7:c0:b8
-info1,info1-03,10.55.96.103,LENOVO,10A8S1WE00,Intel Core i5-4570 @ 3.20GHz,4,8192 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,44:39:c4:8d:6e:06
-info1,info1-06,10.55.96.106,LENOVO,10A8S1WE00,Intel Core i5-4570 @ 3.20GHz,4,24576 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,44:39:c4:90:bf:ef
-info1,info1-08,10.55.96.108,LENOVO,10A8S1WE00,Intel Core i5-4570 @ 3.20GHz,4,8192 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,44:39:c4:8d:6f:5b
-info1,info1-19,10.55.96.119,LENOVO,10A8S1WE00,Intel Core i5-4570 @ 3.20GHz,4,8192 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,44:39:c4:90:be:1e
-info1,info1-20,10.55.96.120,LENOVO,10A8S1WE00,Intel Core i5-4570 @ 3.20GHz,4,24576 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,44:8a:5b:c7:ba:ec
-info1,info1-05,10.55.96.105,LENOVO,10A8S1WE00,Intel Core i5-4570 @ 3.20GHz,4,24576 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,44:39:c4:90:bf:91
-docencia,tecnoloxia,10.55.96.85,Dell Inc.,OptiPlex 7020,Intel Core i5-4570 @ 3.20GHz,4,20480 MB,1600 MT/s,/dev/sda,"223,6G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,98:90:96:b4:fb:08
-docencia,aula219,10.55.96.175,LENOVO,10NM0067SP,Intel Celeron G3930 @ 2.90GHz,2,8192 MB,2133 MT/s,/dev/sda,"119,2G",SSD,GPT,UEFI,eth0,1000Mb/s,Full,6c:4b:90:56:6a:67
-biblioteca,biblio04,10.85.254.74,HP,HP Slim Desktop S01-aF0xxx,AMD Ryzen 3 3250U with Radeon Graphics,1,8192 MB,2400 MT/s,/dev/nvme0n1,"238,5G",SSD,GPT,UEFI,eth0,Unknown!,Unknown!,80:e8:2c:e8:5b:6f
-biblioteca,biblio07,10.55.96.217,"Gigabyte Technology Co., Ltd.",To be filled by O.E.M.,Intel Pentium G645 @ 2.90GHz,4,16384 MB,1333 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,90:2b:34:b5:8b:d6
-biblioteca,biblio02,10.55.96.212,ASUS,All Series,Intel Core i3-4160 @ 3.60GHz,2,4096 MB,1333 MT/s,/dev/sda,"223,6G",SSD,MBR,Legacy,eth0,100Mb/s,Full,78:24:af:33:48:dc
-biblioteca,biblio01,10.55.96.211,"Gigabyte Technology Co., Ltd.",To be filled by O.E.M.,Intel Pentium G645 @ 2.90GHz,4,16384 MB,1333 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,90:2b:34:b6:8f:c7
-biblioteca,biblio05,10.55.96.215,"Gigabyte Technology Co., Ltd.",To be filled by O.E.M.,Intel Pentium G645 @ 2.90GHz,4,16384 MB,1333 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,90:2b:34:b6:90:9a
-biblioteca,biblio08,10.55.96.218,HP,HP Slim Desktop S01-aF0xxx,AMD Ryzen 3 3250U with Radeon Graphics,1,8192 MB,2400 MT/s,/dev/nvme0n1,"238,5G",SSD,TARXETA,DE,eth0,100Mb/s,Full,80:e8:2c:e8:5b:7f
-biblioteca,biblio03,10.55.96.213,"Gigabyte Technology Co., Ltd.",To be filled by O.E.M.,Intel Pentium G645 @ 2.90GHz,4,16384 MB,1333 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,90:2b:34:b6:9f:61
-biblioteca,biblio06,10.55.96.216,"Gigabyte Technology Co., Ltd.",To be filled by O.E.M.,Intel Pentium G645 @ 2.90GHz,4,16384 MB,1333 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,90:2b:34:b6:8f:db
-info2,info2-26,10.55.96.166,LENOVO,10AGS1AE00,Intel Core i5-4590 @ 3.30GHz,4,24576 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,6c:0b:84:68:ba:12
-info2,info2-16,10.55.96.156,System manufacturer,System Product Name,Intel Core i3-2100 @ 3.10GHz,2,8192 MB,1333 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,14:da:e9:24:94:99
-info2,info2-32,10.55.96.172,LENOVO,10AGS1AE00,Intel Core i5-4590 @ 3.30GHz,4,24576 MB,1600 MT/s,/dev/sda,"111,8G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,6c:0b:84:68:c6:93
-info2,info2-24,10.55.96.164,LENOVO,10AGS1AE00,Intel Core i5-4590 @ 3.30GHz,4,24576 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,6c:0b:84:69:71:8b
-info2,info2-18,10.55.96.158,LENOVO,10NM0067SP,Intel Celeron G3930 @ 2.90GHz,2,8192 MB,2133 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,6c:4b:90:56:69:bd
-info2,info2-14,10.55.96.154,FUJITSU,ESPRIMO E700,Intel Pentium G850 @ 2.90GHz,4,6144 MB,1333 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,00:19:99:de:60:b1
-info2,info2-17,10.55.96.157,LENOVO,10NM0067SP,Intel Celeron G3930 @ 2.90GHz,2,8192 MB,2133 MT/s,/dev/sda,"238,5G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,6c:4b:90:56:6a:19
-info2,info2-30,10.55.96.170,LENOVO,10AGS1AE00,Intel Core i5-4590 @ 3.30GHz,4,24576 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,6c:0b:84:68:2e:f1
-info2,info2-profe,10.55.96.140,LENOVO,10L0S01500,Intel Core i5-6500 @ 3.20GHz,2,8192 MB,2133 MT/s,/dev/sda,"238,5G",SSD,MBR,Legacy,eth0,100Mb/s,Full,1c:66:6d:8e:86:2e
-info2,info2-23,10.55.96.163,LENOVO,10AGS1AE00,Intel Core i5-4590 @ 3.30GHz,4,24576 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,6c:0b:84:68:2e:bc
-info2,info2-13,10.55.96.153,FUJITSU,ESPRIMO E700,Intel Pentium G850 @ 2.90GHz,4,6144 MB,1333 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,00:19:99:dd:8a:67
-info2,info2-09,10.55.96.149,FUJITSU,ESPRIMO E700,Intel Pentium G850 @ 2.90GHz,4,6144 MB,1333 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,00:19:99:de:61:f2
-info2,info2-08,10.55.96.148,FUJITSU,ESPRIMO E700,Intel Pentium G850 @ 2.90GHz,4,6144 MB,1333 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,00:19:99:e5:69:0a
-info2,info2-25,10.55.96.165,LENOVO,10AGS1AE00,Intel Core i5-4590 @ 3.30GHz,4,24576 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,6c:0b:84:68:2e:80
-info2,info2-06,10.55.96.146,"Gigabyte Technology Co., Ltd.",To be filled by O.E.M.,Intel Pentium G645 @ 2.90GHz,4,16384 MB,1333 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,90:2b:34:b6:8f:a3
-info2,info2-05,10.55.96.145,ASUSTeK COMPUTER INC.,K5130,Intel Core i3-3240T @ 2.90GHz,2,8192 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,bc:ee:7b:db:3c:37
-info2,info2-03,10.55.96.143,LENOVO,90BX0018SP,Intel Pentium J2900 @ 2.41GHz,1,4096 MB,1333 MT/s,/dev/sda,"111,8G",SSD,MBR,Legacy,eth0,100Mb/s,Full,b8:ae:ed:23:9c:5e
-info2,info1-01,10.55.96.141,FUJITSU,ESPRIMO P400,Intel Pentium G640 @ 2.80GHz,2,4096 MB,1067 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,100Mb/s,Full,00:19:99:df:a2:7f
-info2,info2-04,10.55.96.144,LENOVO,90BX0018SP,Intel Pentium J2900 @ 2.41GHz,1,4096 MB,1333 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,100Mb/s,Full,c0:3f:d5:ef:9e:2f
-info2,info2-27,10.55.96.176,LENOVO,10AGS1AE00,Intel Core i5-4590 @ 3.30GHz,4,24576 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,00:23:24:9f:4c:72
-info2,info2-15,10.55.96.155,System manufacturer,System Product Name,Intel Core i3-2100 @ 3.10GHz,2,8192 MB,1333 MT/s,/dev/sda,"111,8G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,14:da:e9:21:19:9a
-info2,info2-10,10.55.96.150,FUJITSU,ESPRIMO E700,Intel Pentium G850 @ 2.90GHz,4,6144 MB,1333 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,00:19:99:de:60:97
-info2,info2-12,10.55.96.152,FUJITSU,ESPRIMO E700,Intel Pentium G850 @ 2.90GHz,4,6144 MB,1333 MT/s,/dev/sda,"238,5G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,00:19:99:dd:e2:4c
-info2,info2-07,10.55.96.147,FUJITSU,ESPRIMO E700,Intel Pentium G850 @ 2.90GHz,4,6144 MB,1333 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,00:19:99:dd:e1:40
-info2,info2-02,10.55.96.142,"Gigabyte Technology Co., Ltd.",To be filled by O.E.M.,Intel Pentium G645 @ 2.90GHz,4,16384 MB,1333 MT/s,/dev/sda,119.2G,SSD,MBR,Legacy,eth0,Unknown!,Unknown!,90:2b:34:b6:9f:69
-info2,info2-31,10.55.96.171,LENOVO,10AGS1AE00,Intel Core i5-4590 @ 3.30GHz,4,24576 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,6c:0b:84:68:2f:5d
-info2,info2-11,10.55.96.151,FUJITSU,ESPRIMO E700,Intel Pentium G850 @ 2.90GHz,4,6144 MB,1333 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,00:19:99:de:62:05
-info2,info2-28,10.55.96.168,LENOVO,10AGS1AE00,Intel Core i5-4590 @ 3.30GHz,4,24576 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,100Mb/s,Full,00:23:24:9c:fa:4f
-info2,info2-29,10.55.96.169,LENOVO,10AGS1AE00,Intel Core i5-4590 @ 3.30GHz,4,24576 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,6c:0b:84:68:bb:06
-info2,info2-19,10.55.96.159,Hewlett-Packard,HP EliteDesk 800 G1 SFF,Intel Core i5-4570 @ 3.20GHz,4,4096 MB,1600 MT/s,/dev/sda,"111,8G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,74:46:a0:bc:53:39
-info2,info2-21,10.55.96.161,LENOVO,3578AJ9,Intel Core i3-3220 @ 3.30GHz,4,16384 MB,1600 MT/s,/dev/sda,"119,2G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,d4:3d:7e:14:b4:57
-info2,info2-22,10.55.96.162,LENOVO,10AGS1AE00,Intel Core i5-4590 @ 3.30GHz,4,24576 MB,1600 MT/s,/dev/sda,"238,5G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,6c:0b:84:68:ba:fb
-info2,info2-20,10.55.96.160,Dell Inc.,OptiPlex 7020,Intel Core i5-4590 @ 3.30GHz,4,4096 MB,1600 MT/s,/dev/sda,"119,2G",SSD,GPT,UEFI,eth0,1000Mb/s,Full,98:90:96:e0:76:ca
-info3,info3-09,10.55.96.189,Dell Inc.,Precision T5600,Intel Xeon E5-2609 0 @ 2.40GH,8,16384 MB,1067 MT/s,/dev/sda,"223,6G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,b8:ca:3a:94:2f:75
-info3,info3-13,10.55.96.193,HP,HP Pro Tower 290 G9 PCI Desktop PC,12th Gen Intel Core i5-12500,2,32768 MB,3200 MT/s,/dev/nvme0n1,"476,9G",SSD,GPT,UEFI,eth0,1000Mb/s,Full,d0:ad:08:60:08:1a
-info3,info3-16,10.55.96.196,Dell Inc.,Precision T5600,Intel Xeon E5-2609 0 @ 2.40GH,8,16384 MB,1067 MT/s,/dev/sda,"223,6G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,b8:ca:3a:94:32:52
-info3,info3-10,10.55.96.190,Dell Inc.,Precision T5600,Intel Xeon E5-2609 0 @ 2.40GH,8,16384 MB,1067 MT/s,/dev/sda,"223,6G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,b8:ca:3a:8a:7f:00
-info3,info3-08,10.55.96.188,HP,HP Pro Tower 290 G9 PCI Desktop PC,12th Gen Intel Core i5-12500,2,32768 MB,3200 MT/s,/dev/nvme0n1,"476,9G",SSD,GPT,UEFI,eth0,1000Mb/s,Full,d0:ad:08:60:29:c2
-info3,info3-04,10.55.96.184,Dell Inc.,Precision T5600,Intel Xeon E5-2609 0 @ 2.40GH,8,16384 MB,1067 MT/s,/dev/sda,"223,6G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,b8:ca:3a:94:2e:e6
-info3,info3-15,10.55.96.195,Dell Inc.,Precision T5600,Intel Xeon E5-2609 0 @ 2.40GH,8,16384 MB,1067 MT/s,/dev/sda,"223,6G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,b8:ca:3a:94:2f:76
-info3,info3-14,10.55.96.194,HP,HP Pro Tower 290 G9 PCI Desktop PC,12th Gen Intel Core i5-12500,2,32768 MB,3200 MT/s,/dev/nvme0n1,"476,9G",SSD,GPT,UEFI,eth0,1000Mb/s,Full,d0:ad:08:60:28:9e
-info3,info3-20,10.55.96.200,HP,HP Pro Tower 290 G9 PCI Desktop PC,12th Gen Intel Core i5-12500,2,32768 MB,3200 MT/s,/dev/nvme0n1,"476,9G",SSD,GPT,UEFI,eth0,1000Mb/s,Full,d0:ad:08:60:08:27
-info3,info3-07,10.55.96.187,HP,HP Pro Tower 290 G9 PCI Desktop PC,12th Gen Intel Core i5-12500,2,32768 MB,3200 MT/s,/dev/nvme0n1,"476,9G",SSD,GPT,UEFI,eth0,1000Mb/s,Full,d0:ad:08:60:07:73
-info3,info3-23,10.55.96.203,LENOVO,10AGS1AE00,Intel Core i5-4590 @ 3.30GHz,4,24576 MB,1600 MT/s,/dev/sda,"111,8G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,6c:0b:84:68:c6:15
-info3,info3-06,10.55.96.186,HP,HP Pro Tower 290 G9 PCI Desktop PC,12th Gen Intel Core i5-12500,2,32768 MB,3200 MT/s,/dev/nvme0n1,"476,9G",SSD,GPT,UEFI,eth0,1000Mb/s,Full,d0:ad:08:60:24:3f
-info3,info3-17,10.55.96.197,HP,HP Pro Tower 290 G9 PCI Desktop PC,12th Gen Intel Core i5-12500,2,32768 MB,3200 MT/s,/dev/nvme0n1,"476,9G",SSD,GPT,UEFI,eth0,1000Mb/s,Full,d0:ad:08:60:29:3c
-info3,info3-11,10.55.96.191,HP,HP Pro Tower 290 G9 PCI Desktop PC,12th Gen Intel Core i5-12500,2,32768 MB,3200 MT/s,/dev/nvme0n1,"476,9G",SSD,GPT,UEFI,eth0,1000Mb/s,Full,d0:ad:08:60:29:33
-info3,info3-18,10.55.96.198,HP,HP Pro Tower 290 G9 PCI Desktop PC,12th Gen Intel Core i5-12500,2,32768 MB,3200 MT/s,/dev/nvme0n1,"476,9G",SSD,GPT,UEFI,eth0,1000Mb/s,Full,d0:ad:08:60:29:07
-info3,info3-19,10.55.96.199,HP,HP Pro Tower 290 G9 PCI Desktop PC,12th Gen Intel Core i5-12500,2,32768 MB,3200 MT/s,/dev/nvme0n1,"476,9G",SSD,GPT,UEFI,eth0,1000Mb/s,Full,d0:ad:08:60:08:01
-info3,info3-01,10.55.96.181,HP,HP Pro Tower 290 G9 PCI Desktop PC,12th Gen Intel Core i5-12500,2,32768 MB,3200 MT/s,/dev/nvme0n1,"476,9G",SSD,GPT,UEFI,eth0,1000Mb/s,Full,d0:ad:08:60:0c:b0
-info3,info3-24,10.55.96.204,HP,HP Pro Tower 290 G9 PCI Desktop PC,12th Gen Intel Core i5-12500,2,32768 MB,3200 MT/s,/dev/nvme0n1,"476,9G",SSD,GPT,UEFI,eth0,1000Mb/s,Full,d0:ad:08:60:24:86
-info3,info3-12,10.55.96.192,HP,HP Pro Tower 290 G9 PCI Desktop PC,12th Gen Intel Core i5-12500,2,32768 MB,3200 MT/s,/dev/nvme0n1,"476,9G",SSD,GPT,UEFI,eth0,1000Mb/s,Full,d0:ad:08:60:24:e7
-info3,info3-22,10.55.96.202,LENOVO,10AGS1AE00,Intel Core i5-4590 @ 3.30GHz,4,24576 MB,1600 MT/s,/dev/sda,"111,8G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,6c:0b:84:68:2f:4b
-info3,info3-02,10.55.96.182,HP,HP Pro Tower 290 G9 PCI Desktop PC,12th Gen Intel Core i5-12500,2,32768 MB,3200 MT/s,/dev/nvme0n1,"476,9G",SSD,GPT,UEFI,eth0,1000Mb/s,Full,d0:ad:08:60:21:20
-info3,info3-21,10.55.96.201,LENOVO,10AGS1AE00,Intel Core i5-4590 @ 3.30GHz,4,24576 MB,1600 MT/s,/dev/sda,"111,8G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,6c:0b:84:68:c6:83
-info3,info3-05,10.55.96.185,HP,HP Pro Tower 290 G9 PCI Desktop PC,12th Gen Intel Core i5-12500,2,32768 MB,3200 MT/s,/dev/nvme0n1,"476,9G",SSD,GPT,UEFI,eth0,1000Mb/s,Full,d0:ad:08:60:29:6f
-info3,info3-03,10.55.96.183,Dell Inc.,Precision T5600,Intel Xeon E5-2609 0 @ 2.40GH,8,16384 MB,1067 MT/s,/dev/sda,"223,6G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,b8:ca:3a:94:29:d6
-info3,info3-profe,10.55.96.140,HP,HP Slim Desktop S01-aF0xxx,AMD Athlon Silver 3050U with Radeon Graphics,1,8192 MB,2400 MT/s,/dev/nvme0n1,"238,5G",SSD,TARXETA,DE,eth0,1000Mb/s,Full,00:68:eb:ac:0c:9b
-virtualbox,pcprobasvirtualbox,10.55.96.251,proba,proba,proba,proba,proba,proba,proba,proba,proba,proba,proba,proba,proba,proba,08:00:27:55:08:eb
+EQUIPO,RED MAC,IP
+info1-09,44:8a:5b:c7:bb:0c,10.55.96.109
+info1-17,00:23:24:17:39:82,10.55.96.117
+info1-24,7c:05:07:73:fc:08,10.55.96.124
+info1-21,4c:cc:6a:12:04:be,10.55.96.121
+info1-02,44:8a:5b:c0:e0:c0,10.55.96.102
+info1-14,44:8a:5b:a8:b5:cd,10.55.96.114
+info1-27,7c:05:07:73:f0:f7,10.55.96.127
+info1-11,44:39:c4:90:bd:91,10.55.96.111
+info1-29,44:39:c4:90:bf:50,10.55.96.129
+info1-10,44:8a:5b:c7:ba:bb,10.55.96.110
+info1-16,00:23:24:07:28:59,10.55.96.116
+info1-13,44:39:c4:8d:6f:0e,10.55.96.113
+info1-23,7c:05:07:73:e3:0f,10.55.96.123
+info1-28,00:19:99:df:a2:7d,10.55.96.128
+info1-15,00:23:24:17:36:fe,10.55.96.115
+info1-04,44:8a:5b:c7:ba:db,10.55.96.104
+info1-01,44:8a:5b:7f:9b:8b,10.55.96.101
+info1-26,7c:05:07:73:e2:f1,10.55.96.126
+info1-07,44:8a:5b:c7:bf:a0,10.55.96.107
+info1-25,7c:05:07:73:fc:14,10.55.96.125
+info1-30,44:39:c4:90:df:33,10.55.96.130
+info1-12,00:e0:4c:96:c5:47,10.55.96.112
+info1-22,7c:05:07:73:f8:b4,10.55.96.122
+info1-profe,bc:ee:7b:db:3d:44,10.55.96.100
+info1-18,44:8a:5b:c7:c0:b8,10.55.96.118
+info1-03,44:39:c4:8d:6e:06,10.55.96.103
+info1-06,44:39:c4:90:bf:ef,10.55.96.106
+info1-08,44:39:c4:8d:6f:5b,10.55.96.108
+info1-19,44:39:c4:90:be:1e,10.55.96.119
+info1-20,44:8a:5b:c7:ba:ec,10.55.96.120
+info1-05,44:39:c4:90:bf:91,10.55.96.105
+tecnoloxia,98:90:96:b4:fb:08,10.55.96.85
+aula219,6c:4b:90:56:6a:67,10.55.96.175
+biblio04,80:e8:2c:e8:5b:6f,10.85.254.74
+biblio07,90:2b:34:b5:8b:d6,10.55.96.217
+biblio02,78:24:af:33:48:dc,10.55.96.212
+biblio01,90:2b:34:b6:8f:c7,10.55.96.211
+biblio05,90:2b:34:b6:90:9a,10.55.96.215
+biblio08,80:e8:2c:e8:5b:7f,10.55.96.218
+biblio03,90:2b:34:b6:9f:61,10.55.96.213
+biblio06,90:2b:34:b6:8f:db,10.55.96.216
+info2-26,6c:0b:84:68:ba:12,10.55.96.166
+info2-16,14:da:e9:24:94:99,10.55.96.156
+info2-32,6c:0b:84:68:c6:93,10.55.96.172
+info2-24,6c:0b:84:69:71:8b,10.55.96.164
+info2-18,6c:4b:90:56:69:bd,10.55.96.158
+info2-14,00:19:99:de:60:b1,10.55.96.154
+info2-17,6c:4b:90:56:6a:19,10.55.96.157
+info2-30,6c:0b:84:68:2e:f1,10.55.96.170
+info2-profe,1c:66:6d:8e:86:2e,10.55.96.140
+info2-23,6c:0b:84:68:2e:bc,10.55.96.163
+info2-13,00:19:99:dd:8a:67,10.55.96.153
+info2-09,00:19:99:de:61:f2,10.55.96.149
+info2-08,00:19:99:e5:69:0a,10.55.96.148
+info2-25,6c:0b:84:68:2e:80,10.55.96.165
+info2-06,90:2b:34:b6:8f:a3,10.55.96.146
+info2-05,bc:ee:7b:db:3c:37,10.55.96.145
+info2-03,b8:ae:ed:23:9c:5e,10.55.96.143
+info1-01,00:19:99:df:a2:7f,10.55.96.141
+info2-04,c0:3f:d5:ef:9e:2f,10.55.96.144
+info2-27,00:23:24:9f:4c:72,10.55.96.176
+info2-15,14:da:e9:21:19:9a,10.55.96.155
+info2-10,00:19:99:de:60:97,10.55.96.150
+info2-12,00:19:99:dd:e2:4c,10.55.96.152
+info2-07,00:19:99:dd:e1:40,10.55.96.147
+info2-02,90:2b:34:b6:9f:69,10.55.96.142
+info2-31,6c:0b:84:68:2f:5d,10.55.96.171
+info2-11,00:19:99:de:62:05,10.55.96.151
+info2-28,00:23:24:9c:fa:4f,10.55.96.168
+info2-29,6c:0b:84:68:bb:06,10.55.96.169
+info2-19,74:46:a0:bc:53:39,10.55.96.159
+info2-21,d4:3d:7e:14:b4:57,10.55.96.161
+info2-22,6c:0b:84:68:ba:fb,10.55.96.162
+info2-20,98:90:96:e0:76:ca,10.55.96.160
+info3-09,b8:ca:3a:94:2f:75,10.55.96.189
+info3-13,d0:ad:08:60:08:1a,10.55.96.193
+info3-16,b8:ca:3a:94:32:52,10.55.96.196
+info3-10,b8:ca:3a:8a:7f:00,10.55.96.190
+info3-08,d0:ad:08:60:29:c2,10.55.96.188
+info3-04,b8:ca:3a:94:2e:e6,10.55.96.184
+info3-15,b8:ca:3a:94:2f:76,10.55.96.195
+info3-14,d0:ad:08:60:28:9e,10.55.96.194
+info3-20,d0:ad:08:60:08:27,10.55.96.200
+info3-07,d0:ad:08:60:07:73,10.55.96.187
+info3-23,6c:0b:84:68:c6:15,10.55.96.203
+info3-06,d0:ad:08:60:24:3f,10.55.96.186
+info3-17,d0:ad:08:60:29:3c,10.55.96.197
+info3-11,d0:ad:08:60:29:33,10.55.96.191
+info3-18,d0:ad:08:60:29:07,10.55.96.198
+info3-19,d0:ad:08:60:08:01,10.55.96.199
+info3-01,d0:ad:08:60:0c:b0,10.55.96.181
+info3-24,d0:ad:08:60:24:86,10.55.96.204
+info3-12,d0:ad:08:60:24:e7,10.55.96.192
+info3-22,6c:0b:84:68:2f:4b,10.55.96.202
+info3-02,d0:ad:08:60:21:20,10.55.96.182
+info3-21,6c:0b:84:68:c6:83,10.55.96.201
+info3-05,d0:ad:08:60:29:6f,10.55.96.185
+info3-03,b8:ca:3a:94:29:d6,10.55.96.183
+info3-profe,00:68:eb:ac:0c:9b,10.55.96.140
+pcprobasvirtualbox,08:00:27:55:08:eb,10.55.96.251
