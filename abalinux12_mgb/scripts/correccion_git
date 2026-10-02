@@ -1,9 +1,16 @@
 #!/bin/bash
-
-if ! sudo git -C /opt/github pull;
+if [ ! -d /opt/github ];
     then
-        CURRENT_BRANCH=$(sudo git -C /opt/github rev-parse --abbrev-ref HEAD);
-        sudo git -C /opt/github reset --hard "origin/$CURRENT_BRANCH";
-        sudo git -C /opt/github pull;
+	    sudo sudo git clone https://github.com/tecnomgb/coordinacionTIC.git /opt/github;
+        sudo chmod 755 -R /opt/github;
+    else
+        if ! sudo git -C /opt/github pull;
+            then
+                CURRENT_BRANCH=$(sudo git -C /opt/github rev-parse --abbrev-ref HEAD);
+                sudo git -C /opt/github reset --hard "origin/$CURRENT_BRANCH";
+                sudo git -C /opt/github pull;
+        fi
+        sudo chmod 755 -R /opt/github;
 fi
+
 
