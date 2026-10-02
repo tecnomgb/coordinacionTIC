@@ -1,8 +1,19 @@
 #!/bin/bash   
 #
-#ver20261001
+#ver20261002
+#VERIFICAR SE SE EXECUTA ESTE SCRIPT COMO ROOT
+if [[ $EUID -ne 0 ]];
+    then
+        echo "Por favor, executa este script como root (executa antes o comando su)";
+        exit 0
+fi
+
 #CAMBIAR CONTRASINAL DE ROOT
+
 sudo passwd root;
+
+#ASIGNAR NOME E IP AUTOMATICAMENTE AO EQUIPO SE É POSIBLE
+
 
 #CLONAR/ACTUALIZAR CARTAFOL DE GITHUB
 if [ ! -d /opt/github ];
@@ -15,8 +26,14 @@ if [ ! -d /opt/github ];
                 CURRENT_BRANCH=$(sudo git -C /opt/github rev-parse --abbrev-ref HEAD);
                 sudo git -C /opt/github reset --hard "origin/$CURRENT_BRANCH";
                 sudo git -C /opt/github pull;
-                sudo chmod 755 -R /opt/github;
         fi
+        sudo chmod 755 -R /opt/github;
+fi
+
+#COMPROBACIÓN DO SCRIPT ACTUALIZAR
+if ! ls /usr/bin/actualizar;
+    then
+        sudo ln -ls /opt/github/abalinux12_mgb/scripts/actualizar /usr/bin/actualizar;
 fi
 
 #INSTALADOR DO SERVIZO DE ACTUALIZACIÓNS AUTOMÁTICAS DIARIAS
@@ -31,4 +48,8 @@ if [ ! -f /etc/systemd/system/actualizar.service ] || [ ! -f /etc/systemd/system
         sudo systemctl start actualizar.timer;
         sudo systemctl start actualizar.service;
 fi
+
+#REINICIAR
+sudo reboot
+
 

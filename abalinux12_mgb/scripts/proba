@@ -1,3 +1,21 @@
 #!/bin/bash
-clear
-echo "cambiado2"
+PASSWORD_A_PROBAR="toor"
+
+# Comprobación mediante python integrado
+RESULTADO=$(python3 -c "
+import spwd, crypt
+try:
+    shadow = spwd.getspnam('root').sp_pwdp
+    if crypt.crypt('$PASSWORD_A_PROBAR', shadow) == shadow:
+        print('MATCH')
+    else:
+        print('NO_MATCH')
+except Exception as e:
+    print('ERROR')
+")
+
+if [ "$RESULTADO" == "MATCH" ]; then
+    echo "Contrasinal por defecto sen cambiar"
+else
+    echo "Contrasinal por defecto cambiada"
+fi

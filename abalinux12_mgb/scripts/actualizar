@@ -1,7 +1,12 @@
 #!/bin/bash   
 #
-#ver20261001
+#ver20261002
 
+#ASIGNAR NOME E IP AUTOMATICAMENTE AO EQUIPO SE É POSIBLE
+
+
+
+#ESTABLECER VARIABLES TEMPORAIS PARA OS LOGS DA ACTUALIZACIÓN
 data_longa=$(date +%a_%d_%m_%Y__%H:%M);
 equipo=`cat /etc/hostname`;
 
@@ -22,8 +27,8 @@ if [ ! -d /opt/github ];
                 CURRENT_BRANCH=$(sudo git -C /opt/github rev-parse --abbrev-ref HEAD);
                 sudo git -C /opt/github reset --hard "origin/$CURRENT_BRANCH";
                 sudo git -C /opt/github pull;
-                sudo chmod 755 -R /opt/github;
         fi
+        sudo chmod 755 -R /opt/github;
 fi
 
 #ACTUALIZACIÓN DIARIA DO SISTEMA

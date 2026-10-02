@@ -5,19 +5,22 @@
 #INSTALADOR DO SERVIZO DE ACTUALIZACIÓNS AUTOMÁTICAS DIARIAS
 if [ ! -f /etc/systemd/system/actualizar.service ] || [ ! -f /etc/systemd/system/actualizar.timer ] || [ `egrep -c 'network-online' /etc/systemd/system/actualizar.service` = '0' ];
     then
-        sudo rm -f /var/tmp/*.service;
-        sudo rm -f /var/tmp/*.timer;
         sudo systemctl stop actualizar.service;
-        sudo /usr/bin/wget -O /var/tmp/actualizar.service https://boxabalar.edu.xunta.gal/index.php/s/joJW9Jq3P89N9GH/download/actualizar.service;
-        sudo /usr/bin/wget -O /var/tmp/actualizar.timer https://boxabalar.edu.xunta.gal/index.php/s/TeGgL5X5xmES79A/download/actualizar.timer;
-        sudo mv -f /var/tmp/actualizar.service /etc/systemd/system/actualizar.service;
-        sudo mv -f /var/tmp/actualizar.timer /etc/systemd/system/actualizar.timer;
+        sudo cp -f /opt/github/abalinux12_mgb/ficheiros/actualizar.service /etc/systemd/system/actualizar.service;
+        sudo cp -f /opt/github/abalinux12_mgb/ficheiros/actualizar.timer /etc/systemd/system/actualizar.timer;
 		sudo chmod 755 /etc/systemd/system/actualiza*;
         sudo systemctl daemon-reload;
         sudo systemctl enable actualizar.timer;
         sudo systemctl start actualizar.timer;
         sudo systemctl start actualizar.service;
 fi
+
+#COMPROBACIÓN DO SCRIPT ACTUALIZAR
+if ! ls /usr/bin/actualizar;
+    then
+        sudo ln -ls /opt/github/abalinux12_mgb/scripts/actualizar /usr/bin/actualizar;
+fi
+
 
 #BLOQUEO DE PÁXINAS WEB
 if [ `egrep -c 'info' /etc/hostname` = '1' ] && [ `egrep -c 'profe' /etc/hostname` = '0' ] || [ `egrep -c 'biblio' /etc/hostname` = '1' ] || [ `egrep -c 'portatil-tecno' /etc/hostname` = '1' ] || [ `egrep -c 'portatil-apoio' /etc/hostname` = '1' ];
