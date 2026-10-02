@@ -1,21 +1,69 @@
 #!/bin/bash
-PASSWORD_A_PROBAR="toor"
 
-# Comprobación mediante python integrado
-RESULTADO=$(python3 -c "
-import spwd, crypt
-try:
-    shadow = spwd.getspnam('root').sp_pwdp
-    if crypt.crypt('$PASSWORD_A_PROBAR', shadow) == shadow:
-        print('MATCH')
-    else:
-        print('NO_MATCH')
-except Exception as e:
-    print('ERROR')
-")
+# Verificar que se ejecuta como root (necesario para cambiar red y hostname)
+if [ "$EUID" -ne 0 ]; then
+  echo "[-] Este script debe ejecutarse con sudo o como root."
+  exit 1
+fi
 
-if [ "$RESULTADO" == "MATCH" ]; then
-    echo "Contrasinal por defecto sen cambiar"
+# Ruta del archivo CSV
+CSV_FILE="/opt/github/abalinux12_mgb/ficheiros/inventario_equipos.csv"
+
+# Obtener la interfaz activa y su MAC
+INTERFAZ=$(ip route get 8.8.8.8 | awk '{print $5; exit}')
+if [ -z "$INTERFAZ" ]; then
+    echo "[-] No se pudo detectar una interfaz de red activa."
+    exit 1
+fi
+
+MAC_ACTUAL=$(cat /sys/class/net/$INTERFAZ/address)
+CONEXION=$(nmcli -t -f DEVICE,NAME connection show --active | grep "^$INTERFAZ:" | cut -d: -f2)
+
+IP_ENCONTRADA=""
+EQUIPO_ENCONTRADO=""
+
+# Ajuste para leer las 18 columnas (AULA, EQUIPO, IP, ..., RED MAC)
+while IFS=',' read -r aula equipo ip_csv marca modelo micro ranuras ram_cant ram_vel disco_dev disco_tam disco_tipo disco_part disco_arr red_int red_vel red_dup mac_csv || [ -n "$mac_csv" ]; do
+    
+    # Limpiar posibles espacios, comillas y retornos de carro
+    mac_csv=$(echo "$mac_csv" | tr -d '\r"' | xargs)
+    ip_csv=$(echo "$ip_csv" | tr -d '\r"' | xargs)
+    equipo=$(echo "$equipo" | tr -d '\r"' | xargs)
+    
+    # Saltar la cabecera
+    [[ "$mac_csv" == "RED MAC" ]] && continue
+    
+    if [[ "${MAC_ACTUAL,,}" == "${mac_csv,,}" ]]; then
+        IP_ENCONTRADA="$ip_csv"
+        EQUIPO_ENCONTRADO="$equipo"
+        break
+    fi
+done < <(tail -n +2 "$CSV_FILE")
+
+if [[ -z "$IP_ENCONTRADA" ]]; then
+    echo "[-] MAC ($MAC_ACTUAL) no encontrada en el inventario."
+    exit 0
 else
-    echo "Contrasinal por defecto cambiada"
+    echo "[+] MAC encontrada. Asignando equipo: $EQUIPO_ENCONTRADO con IP: $IP_ENCONTRADA"
+    
+    # 1. Asignar el nombre de equipo al sistema (Hostname)
+    hostnamectl set-hostname "$EQUIPO_ENCONTRADO"
+    
+    # 2. Actualizar /etc/hosts para que reconozca el nuevo nombre localmente
+    if grep -q "127.0.1.1" /etc/hosts; then
+        sed -i "s/127.0.1.1.*/127.0.1.1\t$EQUIPO_ENCONTRADO/" /etc/hosts
+    else
+        echo -e "127.0.1.1\t$EQUIPO_ENCONTRADO" >> /etc/hosts
+    fi
+
+    # 3. Aplicar configuración de red (IP manual)
+    if [ -n "$CONEXION" ]; then
+        /usr/bin/nmcli con mod "$CONEXION" ipv4.addresses "$IP_ENCONTRADA/24" ipv4.gateway 10.55.96.1 ipv4.dns "8.8.8.8,1.1.1.1" ipv4.method manual
+        /usr/bin/nmcli con up "$CONEXION"
+        echo "[+] Red configurada correctamente en la conexión '$CONEXION'."
+    else
+        echo "[-] No se encontró una conexión activa de NetworkManager para aplicar la IP automáticamente."
+    fi
+    
+    echo "[✔] Configuración aplicada con éxito. Nombre de equipo actual: $(hostname)"
 fi
