@@ -1,0 +1,10 @@
+[Unit]
+Description=Ejecutar actualizar.service una vez al día
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+Unit=actualizar.service
+
+[Install]
+WantedBy=timers.target

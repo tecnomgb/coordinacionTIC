@@ -1,26 +1,23 @@
 #!/bin/sh   
 #
 #ver20261001
+#CAMBIAR CONTRASINAL DE ROOT
+sudo passwd root;
 
-#CLONAR CARTAFOL DE GITHUB
+#CLONAR/ACTUALIZAR CARTAFOL DE GITHUB
 if [ ! -d /opt/github ];
     then
 	    sudo sudo git clone https://github.com/tecnomgb/coordinacionTIC.git /opt/github;
+    else
+        sudo git -C /opt/github pull;
 fi
-
-#ACTUALIZAR O CONTIDO DO CARTAFOL DE GITHUB CLONADO
-sudo git -C /opt/github pull;
-
-#UBICAR O ACTUALIZADOR
 
 #INSTALADOR DO SERVIZO DE ACTUALIZACIÓNS AUTOMÁTICAS DIARIAS
 if [ ! -f /etc/systemd/system/actualizar.service ] || [ ! -f /etc/systemd/system/actualizar.timer ] || [ `egrep -c 'network-online' /etc/systemd/system/actualizar.service` = '0' ];
     then
         sudo systemctl stop actualizar.service;
-        sudo cp -f /usr/bin/wget -O /var/tmp/actualizar.service https://boxabalar.edu.xunta.gal/index.php/s/joJW9Jq3P89N9GH/download/actualizar.service;
-        sudo /usr/bin/wget -O /var/tmp/actualizar.timer https://boxabalar.edu.xunta.gal/index.php/s/TeGgL5X5xmES79A/download/actualizar.timer;
-        sudo mv -f /var/tmp/actualizar.service /etc/systemd/system/actualizar.service;
-        sudo mv -f /var/tmp/actualizar.timer /etc/systemd/system/actualizar.timer;
+        sudo cp -f /opt/github/abalinux12_mgb/ficheiros/actualizar.service /etc/systemd/system/actualizar.service;
+        sudo cp -f /opt/github/abalinux12_mgb/ficheiros/actualizar.timer /etc/systemd/system/actualizar.timer;
 		sudo chmod 755 /etc/systemd/system/actualiza*;
         sudo systemctl daemon-reload;
         sudo systemctl enable actualizar.timer;
