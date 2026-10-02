@@ -55,27 +55,31 @@ else
         echo -e "127.0.1.1\t$EQUIPO_ENCONTRADO" >> /etc/hosts
     fi
 
-    # 3. Gestionar la conexión de red evitando el bloqueo de ifupdown
+    # 3. Gestionar la conexión de red evitando bloqueos
     NOMBRE_CONEXION="Conexion-Inventario-$INTERFAZ"
     
-    # Intentar eliminar conexiones previas asociadas a esta interfaz para evitar conflictos
+    echo "[+] Limpiando conexiones anteriores en la interfaz $INTERFAZ..."
+    # Desactivar y borrar perfiles previos asociados a esta interfaz de forma silenciosa
+    nmcli device disconnect "$INTERFAZ" 2>/dev/null
     nmcli -t -f NAME,DEVICE connection show | grep ":$INTERFAZ$" | cut -d: -f1 | while read -r c; do
         nmcli connection delete "$c" 2>/dev/null
     done
 
-    # Crear una nueva conexión limpia con NetworkManager (tipo ethernet vinculada a la MAC)
     echo "[+] Creando perfil de red gestionado para la interfaz $INTERFAZ..."
-    nmcli connection add type ethernet ifname "$INTERFAZ" con-name "$NOMBRE_CONEXION" save yes >/dev/null
-    
-    # Configurar la IP estática, puerta de enlace y DNS
-    nmcli connection modify "$NOMBRE_CONEXION" \
+    # Crear la conexión y configurar IP, gateway y DNS en un solo comando para evitar múltiples bloqueos
+    nmcli connection add type ethernet ifname "$INTERFAZ" con-name "$NOMBRE_CONEXION" \
         ipv4.addresses "$IP_ENCONTRADA/24" \
         ipv4.gateway "10.55.96.1" \
         ipv4.dns "8.8.8.8,1.1.1.1" \
-        ipv4.method manual
+        ipv4.method manual \
+        autoconnect yes >/dev/null
         
-    # Activar la conexión
-    nmcli connection up "$NOMBRE_CONEXION"
+    echo "[+] Aplicando la conexión sin bloqueo..."
+    # Activar la conexión de manera asíncrona/forzada para que no se cuelgue la consola
+    nmcli connection up "$NOMBRE_CONEXION" ifname "$INTERFAZ" >/dev/null 2>&1 &
+    
+    # Dar un pequeño respiro para que NetworkManager aplique el cambio de IP
+    sleep 3
     
     echo "[✔] Configuración aplicada con éxito."
     echo "    - Hostname: $(hostname)"
