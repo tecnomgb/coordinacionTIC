@@ -1,17 +1,34 @@
-#!/bin/sh   
+#!/bin/bash   
 #
 #ver20261001
 
 data_longa=$(date +%a_%d_%m_%Y__%H:%M);
 equipo=`cat /etc/hostname`;
 
-#ACTUALIZAR O CONTIDO DO REPOSITORIO DE SCRIPTS
-sudo git -C /opt/github pull;
-sudo chmod 755 -R /opt/github/abalinux12_mgb/scripts;
-sudo rm -f /opt/actualizacion_*.txt;
-sudo rm -f /opt/actualizacion_*.err;
+#COMPROBACIÓN DA CONEXIÓN A INTERNET
+if ! ping -c 1 github.com &> /dev/null;
+    then
+        exit 0
+fi
+
+#CLONAR/ACTUALIZAR CARTAFOL DE GITHUB
+if [ ! -d /opt/github ];
+    then
+	    sudo sudo git clone https://github.com/tecnomgb/coordinacionTIC.git /opt/github;
+        sudo chmod 755 -R /opt/github;
+    else
+        if ! sudo git -C /opt/github pull;
+            then
+                CURRENT_BRANCH=$(sudo git -C /opt/github rev-parse --abbrev-ref HEAD);
+                sudo git -C /opt/github reset --hard "origin/$CURRENT_BRANCH";
+                sudo git -C /opt/github pull;
+                sudo chmod 755 -R /opt/github;
+        fi
+fi
+
+#ACTUALIZACIÓN DIARIA DO SISTEMA
 sudo rm -f /var/tmp/actualizacion_*.txt;
 sudo rm -f /var/tmp/actualizacion_*.err;
-sudo sh /opt/github/abalinux12_mgb/scripts/posin > /var/tmp/actualizacion_"$equipo"_$data_longa.txt 2> /var/tmp/actualizacion_"$equipo"_$data_longa.err;
+sudo bash /opt/github/abalinux12_mgb/scripts/actualizacion_diaria > /var/tmp/actualizacion_"$equipo"_$data_longa.txt 2> /var/tmp/actualizacion_"$equipo"_$data_longa.err;
 exit
 

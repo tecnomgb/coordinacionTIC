@@ -1,4 +1,4 @@
-#!/bin/sh   
+#!/bin/bash   
 #
 #ver20261001
 #CAMBIAR CONTRASINAL DE ROOT
@@ -8,8 +8,15 @@ sudo passwd root;
 if [ ! -d /opt/github ];
     then
 	    sudo sudo git clone https://github.com/tecnomgb/coordinacionTIC.git /opt/github;
+        sudo chmod 755 -R /opt/github;
     else
-        sudo git -C /opt/github pull;
+        if ! sudo git -C /opt/github pull;
+            then
+                CURRENT_BRANCH=$(sudo git -C /opt/github rev-parse --abbrev-ref HEAD);
+                sudo git -C /opt/github reset --hard "origin/$CURRENT_BRANCH";
+                sudo git -C /opt/github pull;
+                sudo chmod 755 -R /opt/github;
+        fi
 fi
 
 #INSTALADOR DO SERVIZO DE ACTUALIZACIÓNS AUTOMÁTICAS DIARIAS

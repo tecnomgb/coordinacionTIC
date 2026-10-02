@@ -1,0 +1,837 @@
+#!/bin/bash   
+#
+#ver20261001
+
+#INSTALADOR DO SERVIZO DE ACTUALIZACIÓNS AUTOMÁTICAS DIARIAS
+if [ ! -f /etc/systemd/system/actualizar.service ] || [ ! -f /etc/systemd/system/actualizar.timer ] || [ `egrep -c 'network-online' /etc/systemd/system/actualizar.service` = '0' ];
+    then
+        sudo rm -f /var/tmp/*.service;
+        sudo rm -f /var/tmp/*.timer;
+        sudo systemctl stop actualizar.service;
+        sudo /usr/bin/wget -O /var/tmp/actualizar.service https://boxabalar.edu.xunta.gal/index.php/s/joJW9Jq3P89N9GH/download/actualizar.service;
+        sudo /usr/bin/wget -O /var/tmp/actualizar.timer https://boxabalar.edu.xunta.gal/index.php/s/TeGgL5X5xmES79A/download/actualizar.timer;
+        sudo mv -f /var/tmp/actualizar.service /etc/systemd/system/actualizar.service;
+        sudo mv -f /var/tmp/actualizar.timer /etc/systemd/system/actualizar.timer;
+		sudo chmod 755 /etc/systemd/system/actualiza*;
+        sudo systemctl daemon-reload;
+        sudo systemctl enable actualizar.timer;
+        sudo systemctl start actualizar.timer;
+        sudo systemctl start actualizar.service;
+fi
+
+#BLOQUEO DE PÁXINAS WEB
+if [ `egrep -c 'info' /etc/hostname` = '1' ] && [ `egrep -c 'profe' /etc/hostname` = '0' ] || [ `egrep -c 'biblio' /etc/hostname` = '1' ] || [ `egrep -c 'portatil-tecno' /etc/hostname` = '1' ] || [ `egrep -c 'portatil-apoio' /etc/hostname` = '1' ];
+    then
+        ver_bloqueo="#ver20260726";
+        if [ `egrep -c "$ver_bloqueo" /etc/hosts` = '0' ];
+            then
+                sudo sed '/#Inicio de listaxe de webs a bloquear/,/#Fin de listaxe de webs a bloquear/d' /etc/hosts;
+                sudo /usr/bin/wget -O /var/tmp/listaxe_webs_bloqueadas https://boxabalar.edu.xunta.gal/index.php/s/zF53cwDZqgG229w/download/listaxe_webs_bloqueadas;
+                sudo sed -i '$r /var/tmp/listaxe_webs_bloqueadas' /etc/hosts;
+                sudo rm -f /var/tmp/listaxe_webs_bloqueadas;
+        fi
+fi
+
+#ELIMINACIÓN DO SCRIPT ACTUALIZAR2
+if [ -f /usr/bin/actualizar2 ];
+    then 
+        sudo rm -f /usr/bin/actualizar2;
+fi
+
+#ACTUALIZACION SCRIPT CONXELAR
+if [ `egrep -c 'BOXABALAR' /usr/bin/conxelar` = '0' ] || [ `egrep -c '#ver20250926' /usr/bin/conxelar` = '0' ] || [ ! -f /usr/bin/conxelar ];
+    then
+        sudo rm -f /var/tmp/conxela*;
+        sudo /usr/bin/wget -O /var/tmp/conxelar https://boxabalar.edu.xunta.gal/index.php/s/bykF9McknQzcjn4/download/conxelar;
+        sudo chmod 755 /var/tmp/conxelar;
+        sudo mv -f /var/tmp/conxelar /usr/bin/conxelar;
+        sudo rm -f /var/tmp/conxela*;
+fi
+	
+#ACTUALIZACIÓN SCRIPT DE LISTAXE DE ACCIÓNS
+if [ -f /usr/bin/accionsfinais ];
+    then
+        sudo rm -f /usr/bin/accionsfinais;
+fi
+
+if [ ! -f /usr/bin/todo ] || [ `egrep -c '#ver20260205' /usr/bin/todo` != '1' ] || [ `egrep -c 'BOXABALAR' /usr/bin/todo` = '0' ];
+    then
+        sudo /usr/bin/wget -O /var/tmp/todo https://boxabalar.edu.xunta.gal/index.php/s/akKa3aKMjCBeTP8/download/todo;
+        sudo mv -f /var/tmp/todo /usr/bin/todo;
+        sudo chmod 755 /usr/bin/todo;
+fi
+
+#ACTUALIZACION SCRIPT ACTUALIZACIÓN PAQUETES
+if [ `egrep -c 'BOXABALAR' /usr/bin/actualizacion` = '0' ] || [ `egrep -c '#ver20251004' /usr/bin/actualizacion` = '0' ] || [ ! -f /usr/bin/actualizacion ];
+    then
+        sudo rm -f /var/tmp/actualizacio*;
+        sudo /usr/bin/wget -O /var/tmp/actualizacion https://boxabalar.edu.xunta.gal/index.php/s/JTKXzor8W7w2MJB/download/actualizacion;
+        sudo chmod 755 /var/tmp/actualizacion;
+        sudo mv -f /var/tmp/actualizacion /usr/bin/actualizacion;
+        sudo rm -f /var/tmp/actualizacio*;
+fi
+
+#ACTUALIZACION SCRIPT LIMPEZA CARTAFOL USUARIO
+if [ `egrep -c 'BOXABALAR' /usr/bin/limpezausuario` = '0' ] || [ `egrep -c '#ver20250926' /usr/bin/limpezausuario` = '0' ] || [ ! -f /usr/bin/limpezausuario ];
+    then
+        sudo rm -f /var/tmp/limpezausua*;
+        sudo /usr/bin/wget -O /var/tmp/limpezausuario https://boxabalar.edu.xunta.gal/index.php/s/9zgbNDYHFA3CWgG/download/limpezausuario;
+        sudo chmod 755 /var/tmp/limpezausuario;
+        sudo mv -f /var/tmp/limpezausuario /usr/bin/limpezausuario;
+        sudo rm -f /var/tmp/limpezausua*;
+fi
+
+#ACTUALIZACION SCRIPT LIMPEZA PAQUETES
+if [ `egrep -c 'BOXABALAR' /usr/bin/limpezapaquetes` = '0' ] || [ `egrep -c '#ver20251022' /usr/bin/limpezapaquetes` = '0' ] || [ ! -f /usr/bin/limpezapaquetes ];
+    then
+        sudo rm -f /var/tmp/limpezapaque*;
+        sudo /usr/bin/wget -O /var/tmp/limpezapaquetes https://boxabalar.edu.xunta.gal/index.php/s/dJPHLtLJD5nHyQe/download/limpezapaquetes;
+        sudo chmod 755 /var/tmp/limpezapaquetes;
+        sudo mv -f /var/tmp/limpezapaquetes /usr/bin/limpezapaquetes;
+        sudo rm -f /var/tmp/limpezapaque*;
+fi
+
+#ACTUALIZACION SCRIPT RENOMEAR
+if [ `egrep -c 'BOXABALAR' /usr/bin/renomear` = '0' ] || [ `egrep -c '#ver20250926' /usr/bin/renomear` = '0' ] || [ ! -f /usr/bin/renomear ];
+    then
+        sudo rm -f /var/tmp/renomea*;
+        sudo /usr/bin/wget -O /var/tmp/renomear https://boxabalar.edu.xunta.gal/index.php/s/SeHtNEW95Dk2yTe/download/renomear;
+        sudo chmod 755 /var/tmp/renomear;
+        sudo mv -f /var/tmp/renomear /usr/bin/renomear;
+        sudo rm -f /var/tmp/renomea*;
+fi
+	
+#ACTUALIZACION SCRIPT AUTORENOMEAR
+if [ `egrep -c 'BOXABALAR' /usr/bin/autorenomear` = '0' ] || [ `egrep -c '#ver20250926' /usr/bin/autorenomear` = '0' ] || [ ! -f /usr/bin/autorenomear ];
+    then
+        sudo rm -f /var/tmp/autorenomea*;
+        sudo /usr/bin/wget -O /var/tmp/autorenomear https://boxabalar.edu.xunta.gal/index.php/s/MxGzga4MrRf2tKo/download/autorenomear;
+        sudo chmod 755 /var/tmp/autorenomear;
+        sudo mv -f /var/tmp/autorenomear /usr/bin/autorenomear;
+        sudo rm -f /var/tmp/autorenomea*;
+fi
+
+#ACTUALIZACION SCRIPT BATERIA
+if [ `egrep -c 'BOXABALAR' /usr/bin/bateria` = '0' ] || [ `egrep -c '#ver20250926' /usr/bin/bateria` = '0' ] || [ ! -f /usr/bin/bateria ];
+    then
+        sudo rm -f /var/tmp/bateri*;
+        sudo /usr/bin/wget -O /var/tmp/bateria https://boxabalar.edu.xunta.gal/index.php/s/4rceNDoKzTB235t/download/bateria;
+        sudo chmod 755 /var/tmp/bateria;
+        sudo mv -f /var/tmp/bateria /usr/bin/bateria;
+        sudo rm -f /var/tmp/bateri*;
+fi
+
+#ACTUALIZACION SCRIPT BLOQUEOWEB
+if [ `egrep -c 'BOXABALAR' /usr/bin/bloqueoweb` = '0' ] || [ `egrep -c '#ver20250926' /usr/bin/bloqueoweb` = '0' ] || [ ! -f /usr/bin/bloqueoweb ];
+    then
+        sudo rm -f /var/tmp/bloqueowe*;
+        sudo /usr/bin/wget -O /var/tmp/bloqueoweb https://boxabalar.edu.xunta.gal/index.php/s/eif46fGxqiBekHw/download/bloqueoweb;
+        sudo chmod 755 /var/tmp/bloqueoweb;
+        sudo mv -f /var/tmp/bloqueoweb /usr/bin/bloqueoweb;
+        sudo rm -f /var/tmp/bloqueowe*;
+fi
+
+#ACTUALIZACION SCRIPT ARRANXO PROBLEMA RAM
+if [ `egrep -c 'BOXABALAR' /usr/bin/arranxoswap` = '0' ] || [ `egrep -c '#ver20250926' /usr/bin/arranxoswap` = '0' ] || [ ! -f /usr/bin/arranxoswap ];
+    then
+        sudo /usr/bin/wget -O /var/tmp/arranxoswap https://boxabalar.edu.xunta.gal/index.php/s/oytYAfdPfqRRJ5i/download/arranxoswap;
+        sudo mv -f /var/tmp/arranxoswap /usr/bin/arranxoswap;
+        sudo chmod 755 /usr/bin/arranxoswap;
+fi
+
+#ACTUALIZACION SCRIPT INVENTARIO
+if [ `egrep -c 'BOXABALAR' /usr/bin/inventario` = '0' ] || [ `egrep -c '#ver20260619' /usr/bin/inventario` = '0' ] || [ ! -f /usr/bin/inventario ];
+    then
+        sudo /usr/bin/wget -O /var/tmp/inventario https://boxabalar.edu.xunta.gal/index.php/s/qodcQefBpqJw2Ja/download/inventario;
+        sudo mv -f /var/tmp/inventario /usr/bin/inventario;
+        sudo chmod 755 /usr/bin/inventario;
+fi
+
+#ACTUALIZACION SCRIPT SETAUTOLOGIN
+if [ `egrep -c '#ver20251120' /usr/bin/setautologin` = '0' ] || [ ! -f /usr/bin/setautologin ];
+	then
+		sudo /usr/bin/wget -O /var/tmp/setautologin https://boxabalar.edu.xunta.gal/index.php/s/F7TsjbeyxQqQWLm/download/setautologin;
+		sudo mv -f /var/tmp/setautologin /usr/bin/setautologin;
+		sudo chmod 755 /usr/bin/setautologin;
+fi
+#Arranxo da ocultación dos nomes de usuario no menú de inicio de sesión
+if [ `egrep -c '#greeter-hide-users=false' /etc/lightdm/lightdm.conf` = '1' ];
+    then
+        sudo sed -i 's/#greeter-hide-users=false/greeter-hide-users=false/g' /etc/lightdm/lightdm.conf;
+fi
+
+#ACTUALIZACION SCRIPT SETDISPLAYSCLONE
+if [ `egrep -c '#ver20260311' /usr/bin/setdisplaysclone` = '0' ] || [ ! -f /usr/bin/setdisplaysclone ];
+    then
+        sudo /usr/bin/wget -O /var/tmp/setdisplaysclone https://boxabalar.edu.xunta.gal/index.php/s/H2dz3tBFsRCWFnZ/download/setdisplaysclone;
+        sudo mv -f /var/tmp/setdisplaysclone /usr/bin/setdisplaysclone;
+        sudo chmod 755 /usr/bin/setdisplaysclone;
+fi
+
+#ACTUALIZACION SCRIPT SETUPEPOPTES
+if [ `egrep -c '#ver20260206' /usr/bin/setupepoptes` = '0' ] || [ ! -f /usr/bin/setupepoptes ];
+    then
+        sudo /usr/bin/wget -O /var/tmp/setupepoptes https://boxabalar.edu.xunta.gal/index.php/s/jMtRGALKc82mCC9/download/setupepoptes;
+        sudo mv -f /var/tmp/setupepoptes /usr/bin/setupepoptes;
+        sudo chmod 755 /usr/bin/setupepoptes;
+fi
+
+#INSTALACIÓN DA APLICACIÓN TMUX-CSSH
+if [ ! -f /usr/bin/tmux-cssh ];
+    then
+        sudo /usr/bin/wget -O /var/tmp/tmux-cssh https://boxabalar.edu.xunta.gal/index.php/s/7Pcme5L7mb5Ktk4/download/tmux-cssh;
+        sudo chmod 755 /var/tmp/tmux-cssh;
+        sudo mv -f /var/tmp/tmux-cssh /usr/bin/tmux-cssh;
+fi
+
+#ACTUALIZACIÓN DE PAQUETES E LIMPEZA
+if [ -f /opt/VBoxG*/uninstall.sh ];
+    then
+        sudo sh /opt/VBoxG*/uninstall.sh;
+fi
+sudo apt-get update;
+#sudo apt-get install -y caja pluma caja-gtkhash caja-open-terminal caja-sendto caja-admin seahorse eom caja-actions mate-calc mate-utils-common engrampa eom efibootmgr grub-efi-amd64-bin grub-efi-amd64-signed grub-pc wine ktechlab grub-customizer logisim fonts-opensymbol fonts-roboto fonts-ubuntu gnome-chess simplescreenrecorder blender scribus cheese quadrapassel tmux ssh font-manager meshlab fstl;
+sudo dpkg --add-architecture i386 && apt-get update && apt-get install -y wine32;
+sudo apt-get purge -y balena-etcher;
+sudo apt-get purge -y lumi;
+sudo apt-get purge -y codium;
+sudo apt-get purge -y edebeonplusoffline-client;
+sudo apt-get purge -y tuxpaint-stamps-default;
+sudo apt-get purge -y echidnalink-abalar;
+#sudo apt-get purge -y scratux;
+sudo apt-get purge -y solaar;
+sudo apt-get autoremove -y;
+
+#PAQUETES A DESINSTALAR
+sudo apt-get purge -y anki evaoffline lepton-* aulaplaneta-offline dia ardora-abalar gcomprisqt-abalar s4a-abalar ventoy-abalar visualino-abalar ktuberling supertux crack-attack vokoscreen-ng gaupol freemind-abalar brltty;
+sudo rm -rf /opt/ardora64;
+sudo rm -f /usr/share/applications/ardora.desktop;
+sudo rm -rf /opt/gcompris*;
+sudo rm -f /usr/share/applications/gcompris.desktop;
+sudo rm -rf /opt/Lumi;
+sudo rm -f /usr/share/applications/lumi.desktop;
+sudo rm -f /opt/openboard/mgb.zip;
+sudo rm -rf /opt/ventoy;
+sudo rm -f /usr/share/applications/ventoy.desktop;
+#sudo rm -rf /opt/scratux;
+#sudo rm -f /usr/share/applications/scratux.desktop;
+
+#ELIMINAR LANZADORES VELLOS DE SKETCHUP E TINKERCAD
+sudo rm -f /usr/bin/tinkercad;
+sudo rm -f /usr/share/applications/tinkercad.desktop;
+sudo rm -rf /opt/tinkercad;
+sudo rm -f /usr/bin/sketchup;
+sudo rm -f /usr/share/applications/sketchup.desktop;
+sudo rm -rf /opt/sketchup;
+
+#ELIMINAR EXTENSIÓNS NON DESEXADAS NO CHROME
+if [ $(egrep -c 'oldcee' /etc/opt/chrome/policies/managed/extensions.json) = '1' ];
+    then
+        sudo sed -i '/oldcee/d' /etc/opt/chrome/policies/managed/extensions.json;
+fi
+
+#PERSONALIZACIÓNS IES MILLADOIRO - IES MGB
+#Detecta en que instituto se está executando o script
+GATEWAY_IP=$(ip route | grep default | awk '{print $3}' | head -1);
+if [ "$GATEWAY_IP" = '10.55.96.1' ]; then IES="MGB"; elif [ "$GATEWAY_IP" = '10.51.92.1' ] || [ "$GATEWAY_IP" = '10.41.109.1' ]; then IES="MILLADOIRO"; fi
+#Personalización da páxina de inicio nos navegadores web
+if [ "$IES" = "MGB" ];
+    then
+        if [ $(egrep -c 'iesmanuelgarciabarros' /usr/lib/firefox-esr/mozilla.cfg) != '1' ];
+            then
+                sudo sed -i '/browser.startup.homepage/d' /usr/lib/firefox-esr/mozilla.cfg;
+                sudo sed -i '$a lockPref("browser.startup.homepage", "https://www.edu.xunta.gal/centros/iesmanuelgarciabarros/");' /usr/lib/firefox-esr/mozilla.cfg;
+                sed -i '/^$/d' /usr/lib/firefox-esr/mozilla.cfg;
+        fi
+        if [ $(egrep -c 'iesmanuelgarciabarros' /etc/opt/chrome/policies/managed/m11_policies.json) != '2' ];
+            then
+                sudo sed -i '/HomepageLocation/d' /etc/opt/chrome/policies/managed/m11_policies.json;
+                sudo sed -i '/RestoreOnStartupURLs/d' /etc/opt/chrome/policies/managed/m11_policies.json;
+                sudo sed -i '/BrowserSignin/d' /etc/opt/chrome/policies/managed/m11_policies.json;
+                sudo sed -i '/}/d' /etc/opt/chrome/policies/managed/m11_policies.json;
+                sudo sed -i '$a "HomepageLocation": "https://www.edu.xunta.gal/centros/iesmanuelgarciabarros/" ,' /etc/opt/chrome/policies/managed/m11_policies.json;
+                sudo sed -i '$a "RestoreOnStartupURLs": ["https://www.edu.xunta.gal/centros/iesmanuelgarciabarros/"] ,' /etc/opt/chrome/policies/managed/m11_policies.json;
+                sudo sed -i '$a "BrowserSignin": 0 ' /etc/opt/chrome/policies/managed/m11_policies.json;
+                sudo sed -i '$a }' /etc/opt/chrome/policies/managed/m11_policies.json;
+        fi
+        if [ $(egrep -c '"RestoreOnStartupURLs": "https' /etc/opt/chrome/policies/managed/m11_policies.json) = '1' ];
+            then
+                sudo sed -i '/RestoreOnStartupURLs/d' /etc/opt/chrome/policies/managed/m11_policies.json;
+                sudo sed -i '/BrowserSignin/d' /etc/opt/chrome/policies/managed/m11_policies.json;
+                sudo sed -i '/}/d' /etc/opt/chrome/policies/managed/m11_policies.json;
+                sudo sed -i '$a "RestoreOnStartupURLs": ["https://www.edu.xunta.gal/centros/iesmanuelgarciabarros/"] ,' /etc/opt/chrome/policies/managed/m11_policies.json;
+                sudo sed -i '$a "BrowserSignin": 0 ' /etc/opt/chrome/policies/managed/m11_policies.json;
+                sudo sed -i '$a }' /etc/opt/chrome/policies/managed/m11_policies.json;
+        fi                                
+fi
+if [ "$IES" = "MILLADOIRO" ];
+    then
+        sudo apt-get install -y scratux; 
+        if [ $(egrep -c 'iesmilladoiro' /usr/lib/firefox-esr/mozilla.cfg) != '1' ];
+            then
+                sudo sed -i '/browser.startup.homepage/d' /usr/lib/firefox-esr/mozilla.cfg;
+                sudo sed -i '$a lockPref("browser.startup.homepage", "https://www.edu.xunta.gal/centros/iesmilladoiro/");' /usr/lib/firefox-esr/mozilla.cfg;
+                sed -i '/^$/d' /usr/lib/firefox-esr/mozilla.cfg;
+        fi
+        if [ $(egrep -c 'iesmilladoiro' /etc/opt/chrome/policies/managed/m11_policies.json) != '2' ];
+            then
+                sudo sed -i '/HomepageLocation/d' /etc/opt/chrome/policies/managed/m11_policies.json;
+                sudo sed -i '/RestoreOnStartupURLs/d' /etc/opt/chrome/policies/managed/m11_policies.json;
+                sudo sed -i '/BrowserSignin/d' /etc/opt/chrome/policies/managed/m11_policies.json;
+                sudo sed -i '/}/d' /etc/opt/chrome/policies/managed/m11_policies.json;
+                sudo sed -i '$a "HomepageLocation": "https://www.edu.xunta.gal/centros/iesmilladoiro/" ,' /etc/opt/chrome/policies/managed/m11_policies.json;
+                sudo sed -i '$a "RestoreOnStartupURLs": "https://www.edu.xunta.gal/centros/iesmilladoiro/" ,' /etc/opt/chrome/policies/managed/m11_policies.json;
+                sudo sed -i '$a "BrowserSignin": 0 ' /etc/opt/chrome/policies/managed/m11_policies.json;
+                sudo sed -i '$a }' /etc/opt/chrome/policies/managed/m11_policies.json;
+        fi
+        if [ $(egrep -c '"RestoreOnStartupURLs": "https' /etc/opt/chrome/policies/managed/m11_policies.json) = '1' ];
+            then
+                sudo sed -i '/RestoreOnStartupURLs/d' /etc/opt/chrome/policies/managed/m11_policies.json;
+                sudo sed -i '/BrowserSignin/d' /etc/opt/chrome/policies/managed/m11_policies.json;
+                sudo sed -i '/}/d' /etc/opt/chrome/policies/managed/m11_policies.json;
+                sudo sed -i '$a "RestoreOnStartupURLs": ["https://www.edu.xunta.gal/centros/iesmilladoiro/"] ,' /etc/opt/chrome/policies/managed/m11_policies.json;
+                sudo sed -i '$a "BrowserSignin": 0 ' /etc/opt/chrome/policies/managed/m11_policies.json;
+                sudo sed -i '$a }' /etc/opt/chrome/policies/managed/m11_policies.json;
+        fi
+fi
+
+#AUTOAPAGADO DOS EQUIPOS
+if [ ! -f /etc/systemd/system/autoapagado.timer ] || [ `egrep -c '45' /etc/systemd/system/autoapagado.timer` = '0' ];
+    then
+        sudo rm -f /var/tmp/*.servic*;
+        sudo rm -f /var/tmp/*.time*;
+        sudo /usr/bin/wget -O /var/tmp/autoapagado.timer https://boxabalar.edu.xunta.gal/index.php/s/CFHESY5LqwCTzoE/download/autoapagado.timer;
+        sudo /usr/bin/wget -O /var/tmp/autoapagado.service https://boxabalar.edu.xunta.gal/index.php/s/ZcrTnXz5snyRjE9/download/autoapagado.service;
+        sudo mv -f /var/tmp/*.service /etc/systemd/system;
+        sudo mv -f /var/tmp/*.timer /etc/systemd/system;
+        sudo chmod 755 /etc/systemd/system/autoapagado*;
+        sudo systemctl start autoapagado.timer;
+        sudo systemctl enable autoapagado.timer;
+        sudo systemctl daemon-reload;
+fi
+
+#ACTUALIZAR GIMP
+if [ ! -f /var/lib/flatpak/app/org.gimp.GIMP/current/active/export/share/applications/org.gimp.GIMP.desktop ];
+	then
+	    sudo apt-get purge -y gimp;
+		sudo apt-get install -y flatpak;
+		sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo;
+		sudo flatpak install --system -y https://flathub.org/repo/appstream/org.gimp.GIMP.flatpakref;
+fi
+
+if [ `egrep -c 'Manipulación' /var/lib/flatpak/app/org.gimp.GIMP/current/active/export/share/applications/org.gimp.GIMP.desktop` != '0' ];
+	then
+		sudo sed -i '/Name/d' /var/lib/flatpak/app/org.gimp.GIMP/current/active/export/share/applications/org.gimp.GIMP.desktop;
+		sudo sed -i '$a Name=GIMP' /var/lib/flatpak/app/org.gimp.GIMP/current/active/export/share/applications/org.gimp.GIMP.desktop;
+fi
+
+#ACTUALIZAR INKSCAPE
+if [ ! -f /var/lib/flatpak/app/org.inkscape.Inkscape/current/active/export/share/applications/org.inkscape.Inkscape.desktop ];
+	then
+	    sudo apt-get purge -y inkscape;
+		sudo apt-get install -y flatpak;
+		sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo;
+		sudo flatpak install --system -y flathub org.inkscape.Inkscape;
+fi
+
+#ACTUALIZAR PROCESSING
+if [ -d /opt/processin* ];
+    then
+	    sudo sh /opt/processing-*/uninstall.sh;
+	    sudo rm -rf /opt/processin*;
+fi
+if [ ! -f /var/lib/snapd/desktop/applications/processing_processing.desktop ];
+    then
+        sudo apt-get install snapd;
+        sudo snap install processing --classic;
+        sudo rm -f /usr/share/applications/processing_processing.desktop;
+        sudo rm -f /usr/bin/processing;
+        sudo ln -s /snap/bin/processing /usr/bin/processing;
+        sudo cp -f /var/lib/snapd/desktop/applications/processing_processing.desktop /usr/share/applications;
+fi
+if [ $(egrep -c '/snap/processing/current/opt/processing/lib' /usr/share/applications/processing_processing.desktop) != '1' ];
+	then
+		sudo sed -i '/Icon/d' /usr/share/applications/processing_processing.desktop;
+		sudo sed -i '$a Icon=/snap/processing/current/opt/processing/lib/Processing.png' /usr/share/applications/processing_processing.desktop;        
+fi
+
+#ACTUALIZAR THONNY
+if [ ! -f /var/lib/flatpak/app/org.thonny.Thonny/current/active/export/share/applications/org.thonny.Thonny.desktop ];
+	then
+	    sudo apt-get remove -y thonny;
+		sudo apt-get install -y flatpak;
+		sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo;
+		sudo flatpak install --system -y flathub org.thonny.Thonny;
+fi
+
+#ACTUALIZAR LIBREOFFICE
+if [ ! -f /var/lib/flatpak/app/org.libreoffice.LibreoOffice/current/active/export/share/applications/org.libreoffice.LibreoOffice.desktop ];
+	then
+	    sudo apt-get purge -y libreoffice*;
+		sudo apt-get install -y flatpak;
+		sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo;
+		sudo flatpak install --system -y flathub org.libreoffice.LibreoOffice;
+fi
+#Engadir dicionario de español para a corrección de textos neste idioma
+if [ ! -d /var/lib/flatpak/app/org.libreoffice.LibreOffice/current/active/files/libreoffice/share/extensions/es.oxt_FILES ];
+    then
+        sudo /usr/bin/wget -O /var/tmp/es.oxt https://boxabalar.edu.xunta.gal/index.php/s/xZg34zXANZwFDEe/download/es.oxt;
+        sudo unzip -o /var/tmp/es.oxt -d /var/lib/flatpak/app/org.libreoffice.LibreOffice/current/active/files/libreoffice/share/extensions/es.oxt_FILES;
+fi    
+
+#ACTUALIZAR OPENSHOT
+if [ ! -f /var/lib/flatpak/app/org.openshot.OpenShot/current/active/export/share/applications/org.openshot.OpenShot.desktop ];
+	then
+	    sudo apt-get purge -y openshot;
+		sudo apt-get install -y flatpak;
+		sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo;
+		sudo flatpak install --system -y flathub org.openshot.OpenShot;
+fi
+
+#ACTUALIZAR GITHUB DESKTOP
+if [ ! -f /var/lib/flatpak/app/io.github.shiftey.Desktop/current/active/export/share/applications/io.github.shiftey.Desktop.desktop ];
+	then
+		sudo apt-get install -y flatpak;
+		sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo;
+		sudo flatpak install --system -y flathub io.github.shiftey.Desktop;
+fi
+
+#ACTUALIZAR AUDACITY
+if [ ! -f /usr/share/applications/audacity_audacity.desktop ];
+    then
+        sudo apt-get purge -y audacity;
+        sudo apt-get install snapd;
+        sudo snap install audacity;
+        sudo cp -f /var/lib/snapd/desktop/applications/audacity_audacity.desktop /usr/share/applications;
+fi
+
+#INSTALADOR BRIDGE DESIGNER
+if [ ! -f /usr/share/applications/bridge-designer_bridge-designer.desktop ] || [ `egrep -c 'Categories=Education' /usr/share/applications/bridge-designer_bridge-designer.desktop` != '1' ];
+    then
+        sudo apt-get install snapd;
+        sudo snap install bridge-designer;
+        sudo rm -f /usr/share/applications/bridge-designer_bridge-designer.desktop;
+        sudo rm -f /usr/bin/bridge-designer;
+        sudo ln -s /snap/bin/bridge-designer /usr/bin/bridge-designer;
+        sudo cp -f /var/lib/snapd/desktop/applications/bridge-designer_bridge-designer.desktop /usr/share/applications;
+        sudo sed -i "\$aCategories=Education;" /usr/share/applications/bridge-designer_bridge-designer.desktop;
+fi
+
+#INSTALADOR DO SOUND-SWITCHER-INDICATOR
+if [ ! -f /usr/share/applications/indicator-sound-switcher_indicator-sound-switcher.desktop ];
+    then
+        sudo apt-get install snapd;
+		 sudo snap install indicator-sound-switcher;
+        sudo rm -f /usr/share/applications/indicator-sound-switcher_indicator-sound-switcher.desktop;
+        sudo rm -f /usr/bin/indicator-sound-switcher;
+        sudo ln -s /snap/bin/indicator-sound-switcher /usr/bin/indicator-sound-switcher;
+        sudo cp -f /var/lib/snapd/desktop/applications/indicator-sound-switcher_indicator-sound-switcher.desktop /usr/share/applications;
+fi
+
+#ARRANXAR MENÚ APLICACIÓNS
+#Corrixir nome de Pizarra Dixital e engadir Impresión 3D
+if [ ! -f /usr/share/icons/Tango/16x16/categories/encerado-dixital.png ];
+	then
+        sudo cp -f /usr/share/icons/Tango/16x16/categories/pizarra-dixital.png /usr/share/icons/Tango/16x16/categories/encerado-dixital.png;     		
+fi
+if [ `egrep -c 'encerado' /etc/xdg/menus/xfce-applications.menu` = '0' ] || [ `egrep -c '3dprinting' /etc/xdg/menus/xfce-applications.menu` = '0' ];
+	then
+        sudo /usr/bin/wget -O /var/tmp/xfce-applications.menu https://boxabalar.edu.xunta.gal/index.php/s/F5K3an36W8M6xsq/download/xfce-applications.menu;
+        sudo mv -f /var/tmp/xfce-applications.menu /etc/xdg/menus/xfce-applications.menu;
+        sudo chmod 755 /etc/xdg/menus/xfce-applications.menu;
+        sudo /usr/bin/wget -O /var/tmp/xfce-encerado.directory https://boxabalar.edu.xunta.gal/index.php/s/SygLcpe6zc4pjEp/download/xfce-encerado.directory;
+        sudo mv -f /usr/share/desktop-directories/xfce-pizarra.directory /usr/share/desktop-directories/xfce-pizarra.directory.backup;
+        sudo mv -f /var/tmp/xfce-encerado.directory /usr/share/desktop-directories/xfce-encerado.directory;
+        sudo chmod 755 /usr/share/desktop-directories/xfce-encerado.directory;
+        sudo sed -i 's/Pizarra Dixital/Encerado Dixital/g' /usr/share/applications/openboard.desktop;
+        sudo /usr/bin/wget -O /var/tmp/xfce-3dprinting.directory https://boxabalar.edu.xunta.gal/index.php/s/iEc48zy6yJ6izGR/download/xfce-3dprinting.directory;
+        sudo mv -f /var/tmp/xfce-3dprinting.directory /usr/share/desktop-directories/xfce-3dprinting.directory;
+        sudo chmod 755 /usr/share/desktop-directories/xfce-3dprinting.directory;
+        sudo /usr/bin/wget -O /var/tmp/3dprinting.png https://boxabalar.edu.xunta.gal/index.php/s/QRdoxE3Pb75se5H/download/3dprinting.png;
+        sudo mv -f /var/tmp/3dprinting.png /usr/share/icons/Tango/16x16/categories/3dprinting.png;
+        sudo chmod 755 /usr/share/icons/Tango/16x16/categories/3dprinting.png;
+fi
+#Corrixir localización de Xournal
+if [ `egrep -c 'GTK' /usr/share/applications/xournalpp.desktop` = '1' ];
+	then
+		sudo sed -i 's/GTK/Encerado Dixital/g' /usr/share/applications/xournalpp.desktop;
+fi
+#Corrixir nome do ImageMagick
+if [ `egrep -c 'depth=q16' /usr/share/applications/display-im6.q16.desktop` != '0' ];
+	then
+		sudo sed -i 's/ImageMagick (color depth=q16)/ImageMagick/g' /usr/share/applications/display-im6.q16.desktop;
+fi
+
+#INSTALADOR PRUSASLICER
+if [ ! -f /var/lib/flatpak/app/com.prusa3d.PrusaSlicer/current/active/export/share/applications/com.prusa3d.PrusaSlicer.desktop ];
+	then
+		sudo rm -rf /opt/prusaslicer;
+		sudo rm -f /usr/share/applications/*rusa*licer.desktop;
+		sudo rm -f /usr/bin/*rusa*licer;
+		sudo apt-get install -y flatpak;
+		sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo;
+		sudo flatpak -y install flathub com.prusa3d.PrusaSlicer;
+fi
+
+if [ `egrep -c '3DGraphics' /var/lib/flatpak/app/com.prusa3d.PrusaSlicer/current/active/export/share/applications/com.prusa3d.PrusaSlicer.desktop` = '1' ];
+	then
+		sudo sed -i 's/3DGraphics/Impresión 3D/g' /var/lib/flatpak/app/com.prusa3d.PrusaSlicer/current/active/export/share/applications/com.prusa3d.PrusaSlicer.desktop;
+		sudo sed -i 's/3DGraphics/Impresión 3D/g' /var/lib/flatpak/app/com.prusa3d.PrusaSlicer/current/active/export/share/applications/com.prusa3d.PrusaSlicer.GCodeViewer.desktop;
+fi
+
+if [ `egrep -c '# pt_PT.UTF-8' /etc/locale.gen` = '1' ];
+	then
+	    sudo sed -i '/ru_UA.UTF-8/s/^/# /' /etc/locale.gen;
+	    sudo sed -i '/uk_UA.UTF-8/s/^/# /' /etc/locale.gen;
+	    sudo sed -i '/en_GB.UTF-8/s/^# //' /etc/locale.gen;
+	    sudo sed -i '/pt_PT.UTF-8/s/^# //' /etc/locale.gen;
+	    sudo locale-gen;
+fi
+
+#INSTALADOR CREALITY PRINT
+if [ ! -f /opt/crealityprint/CrealityPrint_Ubuntu2004-V6.3.0.3420-x86_64-Release.AppImage ];
+	then
+        sudo rm -f /var/tmp/*.zip;
+        sudo rm -rf /opt/crealityprint;
+        sudo rm -f /usr/share/applications/crealityprint.desktop;
+        sudo rm -f /usr/bin/crealityprint;
+        sudo /usr/bin/wget -O /var/tmp/crealityprint.zip https://boxabalar.edu.xunta.gal/index.php/s/dmcgiCXwXgGWLJH/download/crealityprint.zip;
+        sudo unzip -o /var/tmp/crealityprint.zip -d /opt;
+        sudo chmod 755 -R /opt/crealityprint;
+        sudo ln -s /opt/crealityprint/CrealityPrint_Ubuntu2004-V6.3.0.3420-x86_64-Release.AppImage /usr/bin/crealityprint;
+        sudo cp -f /opt/crealityprint/crealityprint.desktop /usr/share/applications;
+        sudo rm -f /var/tmp/*.zip;
+        sudo locale-gen;
+fi
+
+#INSTALADOR DO ARDUINO IDE2
+if [ ! -f /opt/arduinoide2/arduino-ide_2.3.7_Linux_64bit.AppImage ];
+	then
+        sudo rm -f /var/tmp/*.zip;
+        sudo rm -rf /opt/arduinoide2;
+        sudo rm -f /usr/share/applications/arduinoide2.desktop;
+        sudo rm -f /usr/bin/arduinoide2;
+        sudo /usr/bin/wget -O /var/tmp/arduinoide2.zip https://boxabalar.edu.xunta.gal/index.php/s/aDC9ffcixtwXb9Z/download/arduinoide2.zip;
+        sudo unzip -o /var/tmp/arduinoide2.zip -d /opt;
+        sudo chmod 755 -R /opt/arduinoide2;
+        sudo ln -s /opt/arduinoide2/arduino-ide_2.3.7_Linux_64bit.AppImage /usr/bin/arduinoide2;
+        sudo cp -f /opt/arduinoide2/arduinoide2.desktop /usr/share/applications;
+        sudo rm -f /var/tmp/*.zip;	
+fi
+
+#ACTUALIZAR DRAWIO
+VERSION_DRAWIO=$(dpkg-query --showformat='${Version}' --show draw.io);
+case $VERSION_DRAWIO in
+    29.2.9) ;;
+    *) sudo rm -f /var/tmp/*.deb;
+        sudo /usr/bin/wget -O /var/tmp/drawio-amd64-29.2.9.deb https://boxabalar.edu.xunta.gal/index.php/s/emWb9e344R9xjQn/download/drawio-amd64-29.2.9.deb;
+        sudo gdebi --non-interactive /var/tmp/*.deb;
+        sudo rm -f /var/tmp/*.deb;;
+esac
+sudo sed -i 's/Name=drawio/Name=Drawio/g' /usr/share/applications/drawio.desktop;
+
+#ACTUALIZAR GANTTPROJECT
+VERSION_GANTTPROJECT=$(dpkg-query --showformat='${Version}' --show ganttproject);
+case $VERSION_GANTTPROJECT in
+    3.3.3316-1) ;;
+    *) sudo rm -f /var/tmp/*.deb;
+        sudo /usr/bin/wget -O /var/tmp/ganttproject_3.3.3316-1_all.deb https://boxabalar.edu.xunta.gal/index.php/s/ADeRPYLfHR96rmZ/download/ganttproject_3.3.3316-1_all.deb;
+        sudo gdebi --non-interactive /var/tmp/*.deb;
+        sudo rm -f /var/tmp/*.deb;;
+esac
+sudo sed -i '/OnlyShowIn/d' /usr/share/applications/ganttproject.desktop;
+
+#ACTUALIZAR AFIRMA
+VERSION_AUTOFIRMA=$(dpkg-query --showformat='${Version}' --show autofirma);
+case $VERSION_AUTOFIRMA in
+    1.9.0) ;;
+    *) sudo rm -f /var/tmp/*.deb;
+        sudo /usr/bin/wget -O /var/tmp/autofirma_1_9.deb https://boxabalar.edu.xunta.gal/index.php/s/e6yeJ6B69nWNMqy/download/autofirma_1_9.deb;
+        sudo gdebi --non-interactive /var/tmp/*.deb;
+        sudo rm -f /var/tmp/*.deb;;
+esac
+
+#INSTALACIÓN RELATRAN
+if [ ! -d /opt/relatran ];
+ then
+    sudo rm -f /var/tmp/*.zip;
+    sudo rm -rf /opt/relatran;
+    sudo rm -f /usr/share/applications/relatran.desktop;
+    sudo rm -f /usr/bin/relatran;
+    sudo /usr/bin/wget -O /var/tmp/relatran.zip https://boxabalar.edu.xunta.gal/index.php/s/inx69j5f84zDwZ3/download/relatran.zip;
+    sudo unzip -o /var/tmp/relatran.zip -d /opt;
+    sudo chmod 755 -R /opt/relatran;
+    sudo ln -s /opt/relatran/relatran /usr/bin/relatran;
+    sudo cp -f /opt/relatran/relatran.desktop /usr/share/applications;
+    sudo rm -f /var/tmp/*.zip;
+fi
+
+#ACTUALIZAR PSEINT
+if [ ! -f /opt/pseint/version ] || [ `egrep -c '20250314' /opt/pseint/version` != '1' ];
+    then
+        sudo rm -rf /opt/pseint;
+        sudo rm -f *.tgz;
+        sudo /usr/bin/wget -O /var/tmp/pseint-l64-20250314.tgz https://boxabalar.edu.xunta.gal/index.php/s/orwS5eXW4tJjPZr/download/pseint-l64-20250314.tgz;
+        sudo tar -xzvf /var/tmp/pseint-l64-20250314.tgz -C /opt;
+        sudo rm -f *.tgz;
+fi
+
+#ACTUALIZAR AVIDEMUX
+if [ ! -f /var/lib/flatpak/app/org.avidemux.Avidemux/current/active/export/share/applications/org.avidemux.Avidemux.desktop ];
+    then
+        sudo rm -rf /opt/avidemux;
+        sudo rm -f /usr/share/applications/avidemu*;
+        sudo rm -f /usr/bin/avidemu*;
+        sudo flatpak install --system -y flathub org.avidemux.Avidemux;
+fi
+
+#AXUSTE DA SWAPPINESS
+cantidade_ram=`cat /proc/sys/vm/swappiness`;
+case $cantidade_ram in
+10) ;;
+*) sudo sed -i '/vm.swappiness=/ d' /etc/sysctl.conf; echo "vm.swappiness=10" | sudo tee -a /etc/sysctl.conf; sudo sed -i '/vm.vfs_cache_pressure=/ d' /etc/sysctl.conf; echo "vm.vfs_cache_pressure=50" | sudo tee -a /etc/sysctl.conf;;
+esac
+
+#INSTALACIÓN DO FLUIDSIM
+if [ ! -f /opt/fluidsim/fluidsim ];
+ then
+    sudo rm -f /var/tmp/*.zip;
+    sudo rm -rf /opt/fluidsim;
+    sudo rm -f /usr/share/applications/fluidsim.desktop;
+    sudo rm -f /usr/bin/fluidsim;
+    sudo /usr/bin/wget -O /var/tmp/fluidsim.zip https://boxabalar.edu.xunta.gal/index.php/s/amCkc2Q23WL5BE5/download/fluidsim.zip;
+    sudo unzip -o /var/tmp/fluidsim.zip -d /opt;
+    sudo chmod 755 -R /opt/fluidsim;
+    sudo ln -s /opt/fluidsim/fluidsim /usr/bin/fluidsim;
+    sudo cp -f /opt/fluidsim/fluidsim.desktop /usr/share/applications;
+    sudo rm -f /var/tmp/*.zip;
+fi
+
+#INSTALACIÓN DO CROCODILE TECHNOLOGY
+if [ ! -f /opt/crotech/crotech ];
+ then
+    sudo rm -f /var/tmp/*.zip;
+    sudo rm -rf /opt/crotech;
+    sudo rm -f /usr/share/applications/crotech.desktop;
+    sudo rm -f /usr/bin/crotech;
+    sudo /usr/bin/wget -O /var/tmp/crotech.zip https://boxabalar.edu.xunta.gal/index.php/s/RiafNmxm87Z5toM/download/crotech.zip;
+    sudo unzip -o /var/tmp/crotech.zip -d /opt;
+    sudo chmod 755 -R /opt/crotech;
+    sudo ln -s /opt/crotech/crotech /usr/bin/crotech;
+    sudo cp -f /opt/crotech/crotech.desktop /usr/share/applications;
+    sudo rm -f /var/tmp/*.zip;
+fi
+
+#INSTALACIÓN DO FLASHPLAYER
+if [ ! -f /opt/flashplayer/flashplayer ];
+ then
+    sudo rm -f /var/tmp/*.zip;
+    sudo rm -rf /opt/flashplayer;
+    sudo rm -f /usr/share/applications/flashplayer.desktop;
+    sudo rm -f /usr/bin/flashplayer;
+    sudo /usr/bin/wget -O /var/tmp/flashplayer.zip https://boxabalar.edu.xunta.gal/index.php/s/kYiBnAkQg8m5LEg/download/flashplayer.zip;
+    sudo unzip -o /var/tmp/flashplayer.zip -d /opt;
+    sudo chmod 755 -R /opt/flashplayer;
+    sudo ln -s /opt/flashplayer/flashplayer /usr/bin/flashplayer;
+    sudo cp -f /opt/flashplayer/flashplayer.desktop /usr/share/applications;
+    sudo rm -f /var/tmp/*.zip;
+fi
+
+#SCRIPT PARA A PREINSTALACIÓN DE EPOPTES NOS EQUIPOS DE ALUMNOS DE AULAS INFO
+if [ `egrep -c 'info' /etc/hostname` = '1' ] && [ `egrep -c 'profe' /etc/hostname` = '0' ];
+    then
+        sudo apt-get install -y epoptes-client;
+        #COMPROBACIÓN DE INFO1
+        if [ `egrep -c 'info1' /etc/hostname` = '1' ];
+            then
+                ping -q -c2 10.55.96.100 > /dev/null;
+                if [ $? -eq 0 ] && [ `egrep -c '10.55.96.100' /etc/hosts` = '0' ];
+                    then
+                        sudo sed -i '$a\10.55.96.100	server' /etc/hosts;
+                        sudo epoptes-client -c;
+                fi
+		fi
+		#COMPROBACIÓN DE INFO2
+		if [ `egrep -c 'info2' /etc/hostname` = '1' ];
+           then
+               ping -q -c2 10.55.96.140 > /dev/null;
+               if [ $? -eq 0 ] && [ `egrep -c '10.55.96.140' /etc/hosts` = '0' ];
+                   then
+                       sudo sed -i '$a\10.55.96.140	server' /etc/hosts;
+                       sudo epoptes-client -c;
+               fi
+        fi
+        #COMPROBACIÓN DE INFO3
+		if [ `egrep -c 'info3' /etc/hostname` = '1' ];
+           then
+               ping -q -c2 10.55.96.180 > /dev/null;
+               if [ $? -eq 0 ] && [ `egrep -c '10.55.96.180' /etc/hosts` = '0' ];
+                   then
+                       sudo sed -i '$a\10.55.96.180	server' /etc/hosts;
+                       sudo epoptes-client -c;
+               fi
+		fi
+	else
+		if [ "$IES" = "MGB" ] && [ `egrep -c 'profe' /etc/hostname` = '0' ];
+			then
+				sudo apt-get purge -y epoptes-client;
+		fi
+fi
+
+#INSTALACIÓN DE VIRTUALBOX EN INFO3
+if [ `egrep -c 'info3' /etc/hostname` = '1' ] && [ ! -d /usr/share/virtualbox ];
+    then
+        sudo rm -f /var/tmp/*.deb;
+        sudo /usr/bin/wget -O /var/tmp/virtualbox-7.2_7.2.2-170484~Debian~bullseye_amd64.deb https://boxabalar.edu.xunta.gal/index.php/s/amwBeMoSbsz4Xti/download/virtualbox-7.2_7.2.2-170484~Debian~bullseye_amd64.deb;
+        sudo gdebi --non-interactive /var/tmp/*.deb;
+        sudo rm -f /var/tmp/*.deb;       
+fi
+
+#DETECTAR SE O DISCO DURO RAÍZ É SSD OU EMMC E ESTABLECER UN TRIM NEL EN TAL CASO
+ROOT_PARTITION=$(df -P / | awk 'NR==2 {print $1}')
+# Usamos 'echo' e 'sed' para extraer o nome do disco base (sda, mmcblk0, nvme0n1)
+if echo "$ROOT_PARTITION" | grep -q '/dev/mmcblk'; then
+    # Se é eMMC, o nome do disco é 'mmcblk0' (eliminamos 'p1' ou o que sexa)
+    PRIMARY_DISK=$(echo "$ROOT_PARTITION" | sed 's/[0-9]*$//' | sed 's/\/dev\///')
+elif echo "$ROOT_PARTITION" | grep -q '/dev/nvme'; then
+    # Se é NVMe, o nome do disco é 'nvme0n1' (eliminamos 'p1' ou o que sexa)
+    PRIMARY_DISK=$(echo "$ROOT_PARTITION" | sed 's/p[0-9]*$//' | sed 's/\/dev\///')
+else
+    # Para discos tradicionais (sda, sdb), o nome é 'sda' (eliminamos '1', '2', etc.)
+    PRIMARY_DISK=$(echo "$ROOT_PARTITION" | sed 's/[0-9]*$//' | sed 's/\/dev\///')
+fi
+# 2. Executar blkid e gardar a saída para a comprobación (non se usa neste script, pero mantense por consistencia)
+sudo blkid > /tmp/particions
+# 3. Lóxica de identificación e configuración do TRIM
+# Comprobación A: É eMMC? (O nome do disco contén 'mmcblk')
+# Usamos 'echo' e 'grep -q' (quiet) para emular o [[ ... == *patrón* ]] de Bash
+if echo "$PRIMARY_DISK" | grep -q 'mmcblk';
+then
+    echo "O disco SSD é tipo eMMC ($PRIMARY_DISK)";
+    # Procedemos directamente á configuración do TRIM (Bloque D)
+    # Bloque D: Configuración do TRIM
+    # Usamos 'grep -c' en lugar de 'egrep -c'
+    if [ -f /etc/systemd/system/fstrim.timer.d/override.conf ] && [ "$(grep -c 'daily' /etc/systemd/system/fstrim.timer.d/override.conf)" = '1' ];
+        then
+            echo "Disco SSD con TRIM xa programado diariamente";
+        else
+            sudo mkdir -p /etc/systemd/system/fstrim.timer.d;
+            sudo rm -f /etc/systemd/system/fstrim.timer.d/override.conf;
+            sudo touch /etc/systemd/system/fstrim.timer.d/override.conf;
+            
+            # NOTA: En SH non podemos usar múltiples 'echo' nunha liña con 'tee'.
+            # Usamos un bloque de código para facelo máis limpo.
+            (
+                echo "[Timer]"
+                echo "OnCalendar="
+                echo "OnCalendar=daily"
+            ) | sudo tee /etc/systemd/system/fstrim.timer.d/override.conf;
+            
+            sudo chmod 755 /etc/systemd/system/fstrim.timer.d/override.conf;
+            echo "Configuración de TRIM diario aplicada."
+    fi
+else
+    # Non é eMMC. Comprobación B: É HDD ou SSD tradicional/NVMe?
+    # Comprobamos se o disco é rotacional usando o nome do disco atopado
+    if [ "$(cat "/sys/block/$PRIMARY_DISK/queue/rotational")" = '1' ];
+        then
+            echo "O disco duro principal é tipo HDD ($PRIMARY_DISK)";
+        else
+            # É un SSD estándar ou NVMe
+            
+            # Bloque D: Configuración do TRIM
+            if [ -f /etc/systemd/system/fstrim.timer.d/override.conf ] && [ "$(grep -c 'daily' /etc/systemd/system/fstrim.timer.d/override.conf)" = '1' ];
+                then
+                    echo "Disco SSD con TRIM xa programado diariamente";
+                else
+                    sudo mkdir -p /etc/systemd/system/fstrim.timer.d;
+                    sudo rm -f /etc/systemd/system/fstrim.timer.d/override.conf;
+                    sudo touch /etc/systemd/system/fstrim.timer.d/override.conf;
+                    
+                    (
+                        echo "[Timer]"
+                        echo "OnCalendar="
+                        echo "OnCalendar=daily"
+                    ) | sudo tee /etc/systemd/system/fstrim.timer.d/override.conf;
+                    
+                    sudo chmod 755 /etc/systemd/system/fstrim.timer.d/override.conf;
+                    echo "Configuración de TRIM diario aplicada."
+            fi
+    fi
+fi
+
+#ACTUALIZACION SCRIPT ACTUALIZAR
+if [ `egrep -c 'BOXABALAR' /usr/bin/actualizar` = '0' ] || [ `egrep -c '#ver20251121' /usr/bin/actualizar` = '0' ] || [ ! -f /usr/bin/actualizar ];
+    then
+        sudo rm -f /var/tmp/actuali*;
+        sudo /usr/bin/wget -O /var/tmp/actualizar https://boxabalar.edu.xunta.gal/index.php/s/4Jjobka8t7J37g7/download/actualizar;
+        sudo chmod 755 /var/tmp/actualizar;
+        sudo mv -f /var/tmp/actualizar /usr/bin/actualizar;
+        sudo rm -f /var/tmp/actuali*;
+fi
+
+#INSTALACIÓN DE NOVAS FONTES TIPOGRÁFICAS
+#
+
+#INSTALACIÓN NOS EQUIPOS CON PANEIS DIXITAIS A APLICACIÓN ONBOARD
+if [ `egrep -c 'info2-profe' /etc/hostname` = '1' ] || [ `egrep -c 'aula' /etc/hostname` = '1' ] && [ `egrep -c 'portatil' /etc/hostname` = '0' ];
+    then
+        if [ ! -f /home/usuario/.config/autostart/onboard.desktop ];
+            then
+                sudo cp -f /usr/share/applications/onboard.desktop /home/usuario/.config/autostart/onboard.desktop;
+        fi
+        if [ ! -f /home/profesorado/.config/autostart/onboard.desktop ];
+            then
+                sudo cp -f /usr/share/applications/onboard.desktop /home/profesorado/.config/autostart/onboard.desktop;
+        fi 
+        if [ -d /home/sindo ];
+            then
+                if [ ! -f /home/sindo/.config/autostart/onboard.desktop ];
+                    then
+                        sudo cp -f /usr/share/applications/onboard.desktop /home/sindo/.config/autostart/onboard.desktop;
+                fi
+        fi   
+        if [ -d /home/obdulia ];
+            then
+                if [ ! -f /home/obdulia/.config/autostart/onboard.desktop ];
+                    then
+                        sudo cp -f /usr/share/applications/onboard.desktop /home/obdulia/.config/autostart/onboard.desktop;
+                fi
+        fi   
+fi
+
+
+exit
+
+#INSTALACIÓN DE MICROBLOCKS
+#
+
+##########ACCIÓN TEMPORAL: XERAR INFORME E SUBILO AO PC DO PROFE##########
+#equipo=`cat /etc/hostname`;
+#sudo sh /usr/bin/inventario > /var/tmp/informe_"$equipo".txt;
+#clear;
+#echo "Ubicación do equipo a inventariar?"
+#echo "1) Info1";
+#echo "2) Info2";
+#echo "3) Info3";
+#echo "4) Calquera outra ubicación";
+#read aula;
+#case $aula in
+#	1) scp /var/tmp/informe_"$equipo".txt sindo@10.55.96.100:/home/sindo/Nextcloud/Abalinux11/informes;;
+#	2) scp /var/tmp/informe_"$equipo".txt sindo@10.55.96.140:/home/sindo/Nextcloud/Abalinux11/informes;;
+#	3) scp /var/tmp/informe_"$equipo".txt sindo@10.55.96.180:/home/sindo/Nextcloud/Abalinux11/informes;;
+#	4) scp /var/tmp/informe_"$equipo".txt sindo@10.55.96.85:/home/sindo/Nextcloud/Abalinux11/informes;;
+#esac
+
+#############PENDENTE###############
+#
+#COMANDO PARA DETER EPOPTES NUN CLIENTE
+#sudo killall xtigervncviewer
+
+#CONFIGURAR HORA DO RELOXO
+
+#CONFIGURAR POWER MANAGER PARA APAGAR AO PREMER BOTÓN
+#xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/power-button-action -s 4
+#o anterior comando só funciona sen ter iniciado sesión de root
+
+
