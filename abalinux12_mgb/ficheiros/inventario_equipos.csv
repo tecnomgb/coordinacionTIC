@@ -98,3 +98,4 @@ info3,info3-21,10.55.96.201,LENOVO,10AGS1AE00,Intel Core i5-4590 @ 3.30GHz,4,245
 info3,info3-05,10.55.96.185,HP,HP Pro Tower 290 G9 PCI Desktop PC,12th Gen Intel Core i5-12500,2,32768 MB,3200 MT/s,/dev/nvme0n1,"476,9G",SSD,GPT,UEFI,eth0,1000Mb/s,Full,d0:ad:08:60:29:6f
 info3,info3-03,10.55.96.183,Dell Inc.,Precision T5600,Intel Xeon E5-2609 0 @ 2.40GH,8,16384 MB,1067 MT/s,/dev/sda,"223,6G",SSD,MBR,Legacy,eth0,1000Mb/s,Full,b8:ca:3a:94:29:d6
 info3,info3-profe,10.55.96.140,HP,HP Slim Desktop S01-aF0xxx,AMD Athlon Silver 3050U with Radeon Graphics,1,8192 MB,2400 MT/s,/dev/nvme0n1,"238,5G",SSD,TARXETA,DE,eth0,1000Mb/s,Full,00:68:eb:ac:0c:9b
+virtualbox,pcprobasvirtualbox,10.55.96.251,proba,proba,proba,proba,proba,proba,proba,proba,proba,proba,proba,proba,proba,proba,08:00:27:55:08:eb
